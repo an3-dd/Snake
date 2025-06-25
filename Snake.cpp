@@ -5,6 +5,3 @@ Snake::Snake(){
     headIcon = '+'; //tbd
     bodyIcon = 'O';
 } 
-
-/// proviamo 
-// vincenzo

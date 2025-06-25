@@ -4,6 +4,10 @@
 #include "Board.hpp"
 #include "Apple.hpp"
 
+//for the randomizer
+#include "cstdlib"
+#include "ctime"
+
 class Game{
 
 
@@ -11,17 +15,19 @@ class Game{
 
     Board board;
     bool gameOver;
-    Apple apple;
+    Apple apple[10]; //there are 10 apples on the screen, when one is eaten it respawns in another point
 
     public:
 
     Game(int height, int width);
 
-    // return the game's board heigth
+    //Board getter
+
     int getHeight();
 
-    // return the game's board width
     int getWidth();
+
+    //Board logic
 
     void processInput();
 
@@ -32,13 +38,21 @@ class Game{
     bool isOver();
 
 
-    //print an apple in the game's board
+    //Apple methods
+
+    Position randomPosition(){
+        srand(time(0));
+        Position p;
+        //p.x = rand()% // maxX ??
+        return p;
+    }
+
     void printApple(int x, int y);
 
-    // remove an apple from the game's board
     void removeApple(int x, int y);
 
-    // print a snake in the game's board
+    //Snake methods
+
     // x, y are the coordinates of the snake's tail
     // z, w are the coordinates of the snake's head
     void printSnake(int x, int y, int z, int w);

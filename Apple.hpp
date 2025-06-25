@@ -1,30 +1,21 @@
 #include <ncurses.h>
-
+#include "Position.hpp"
 
 class Apple{
 
     protected:
 
-    int x, y;
+    Position position;
     char icon;
 
     public:
 
     // the econstructor of the apple
-    Apple(int x, int y);
+    Apple(Position);
 
     // return the apple's icon
     char getIcon();
 
-    
-    int getX();
-
-    int getY();
-
-
-
-
-
-
+    Position getPosition();
 
 };

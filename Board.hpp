@@ -1,5 +1,5 @@
 #include <ncurses.h>
-
+#include "Position.hpp"
 
 class Board{
 
@@ -34,20 +34,22 @@ class Board{
     void clear();
 
     // add a char in a point
-    void addCharAt(int y, int x, chtype ch);
+    //WAS void addCharAt(int y, int x, chtype ch);
+    void addCharAt(Position pos, chtype ch);
 
     // return the button's code of a pressed button
     int getInput();
 
     // returns the char at x, y
-    char getCharAt(int x, int y);
+    //WAS char getCharAt(int x, int y);
+    char getCharAt(Position pos);
 
     // remove the char at x, y
-    void rmCharAt(int x, int y);
+    //WAS void rmCharAt(int x, int y);
+    void rmCharAt(Position pos);
 
     // return true if the x, y, dot is empty
-    bool isEmpty(int x, int y){
-        return mvwinch(win, y, x) == ' ';
-    }
-
+    //WAS bool isEmpty(int x, int y);
+    bool isEmpty(Position pos);
+    
 };

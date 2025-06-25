@@ -44,8 +44,8 @@ void Board::refresh(){
     wrefresh(win);
 }
 
-void Board::addCharAt(int x, int y, chtype ch){
-    mvwaddch(win, y, x, ch);
+void Board::addCharAt(Position p, chtype ch){
+    mvwaddch(win, p.y, p.x, ch);
     wrefresh(win);
 }
 
@@ -53,16 +53,19 @@ int Board::getInput(){
     return wgetch(win);
 }
 
-char Board::getCharAt(int x, int y){
-    chtype ch = mvinch(y, x);
+char Board::getCharAt(Position p){
+    chtype ch = mvinch(p.y, p.x);
     char c = ch & A_CHARTEXT;
 
     return c;
 }
 
-void Board::rmCharAt(int x, int y){
-    mvwaddch(win, y, x, ' ');
+void Board::rmCharAt(Position p){
+    mvwaddch(win, p.y, p.x, ' ');
 }
 
+bool Board::isEmpty(Position p){
+    return mvwinch(win, p.y, p.x) == ' ';
+}
 
 
