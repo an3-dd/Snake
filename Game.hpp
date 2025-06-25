@@ -12,13 +12,12 @@ class Game{
     Board board;
     bool gameOver;
     Apple apple;
-    // Snake snake;
 
     public:
 
     Game(int height, int width);
 
-    // retunr the game's board heigth
+    // return the game's board heigth
     int getHeight();
 
     // return the game's board width
