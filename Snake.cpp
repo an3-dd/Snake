@@ -5,4 +5,3 @@ Snake::Snake(){
     headIcon = '+'; //tbd
     bodyIcon = 'O';
 }
-
