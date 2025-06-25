@@ -16,10 +16,6 @@ int Game::getWidth(){
     return this->board.getWidth();
 }
 
-void Game::processInput(){
-    chtype input = this->board.getInput();
-}
-
 void Game::redraw(){
     board.refresh();
 }

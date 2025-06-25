@@ -8,7 +8,7 @@ class Snake{
 
     protected:
 
-    bool body[10][1];
+    bool body[1][1];
     char headIcon;
     char bodyIcon;
 
