@@ -11,7 +11,6 @@ class Game{
 
     Board board;
     bool gameOver;
-    Apple apple;
     // Snake snake;
 
     public:
@@ -31,20 +30,6 @@ class Game{
     void redraw();
 
     bool isOver();
-
-    //print an apple in the game's board
-    void printApple(int x, int y);
-
-    // remove an apple from the game's board
-    void removeApple(int x, int y);
-
-    // print a snake in the game's board
-    // x, y are the coordinates of the snake's tail
-    // z, w are the coordinates of the snake's head
-    void printSnake(int x, int y, int z, int w);
-
-    
-
 
 
 };
