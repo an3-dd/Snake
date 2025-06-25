@@ -64,4 +64,14 @@ void Board::rmCharAt(int x, int y){
     mvwaddch(win, y, x, ' ');
 }
 
+void Board::printApple(int x, int y){
+    if (isEmpty(x, y)) addCharAt(x, y, this->apple.getIcon());
+}
+
+void Game::removeApple(int x, int y){
+    if (board.getCharAt(x, y) == apple.getIcon()){
+        board.rmCharAt(x, y);
+    }
+}
+
 
