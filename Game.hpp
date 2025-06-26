@@ -40,22 +40,17 @@ class Game{
 
     //Apple methods
 
-    Position randomPosition(){
-        srand(time(0));
-        Position p;
-        //p.x = rand()% // maxX ??
-        return p;
-    }
+    Position randomPosition();
 
-    void printApple(int x, int y);
+    void printApple(Position p);
 
-    void removeApple(int x, int y);
+    void removeApple(Position p);
+    
 
     //Snake methods
 
-    // x, y are the coordinates of the snake's tail
-    // z, w are the coordinates of the snake's head
-    void printSnake(int x, int y, int z, int w);
+    // t is the position of the tail, h for the head
+    void printSnake(Position t, Position h);
 
 
 

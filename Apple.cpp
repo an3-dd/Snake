@@ -5,6 +5,13 @@ Apple::Apple(Position p){
     this->icon = '$';
 }
 
+Apple::Apple(){
+    this->position.x = 0;
+    this->position.y = 0;
+    this->icon = '$';
+}
+
+
 char Apple::getIcon(){
     return this->icon;
 }
