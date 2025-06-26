@@ -16,6 +16,10 @@ class Board{
 
     Board(int height, int width);
 
+    int getWidth();
+
+    int getHeigth();
+
     // initialize the board
     void init();
 

@@ -1,5 +1,6 @@
 
 #include "Board.hpp"
+#include "Const.hpp"
 #include <ncurses.h>
 
 Board::Board(int height, int width){
@@ -16,6 +17,14 @@ Board::Board(int height, int width){
     
     this->height = height;
     this->width = width;
+}
+
+int getHeigth(){
+    return HEIGHT;
+}
+
+int getWidth(){
+    return WIDTH;
 }
 
 void Board::init(){
