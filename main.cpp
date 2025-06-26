@@ -20,9 +20,10 @@ int main(int argc, char ** argv){
         c = getch();
 
 
-        // if press 'a' button print an apple in the x, y position
+        // if press 'a' button print an apple in random position
         if (c == 'a'){
-            game.printApple(5, 10);
+            Position p = game.randomPosition();
+            game.printApple(p);
         }
     }
 

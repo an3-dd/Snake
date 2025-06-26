@@ -24,7 +24,7 @@ bool Game::isOver(){
 }
 
 void Game::updateState(){
-    
+    //TODO
 }
 
 Position Game::randomPosition(){

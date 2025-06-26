@@ -6,8 +6,7 @@ Apple::Apple(Position p){
 }
 
 Apple::Apple(){
-    this->position.x = 0;
-    this->position.y = 0;
+    this->position = Position(0,0);
     this->icon = '$';
 }
 
