@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include "Const.hpp"
 #include "Game.hpp"
 
 
@@ -9,7 +10,7 @@ int main(int argc, char ** argv){
     refresh();
     noecho();
 
-    Game game(50, 150);
+    Game game(HEIGHT, WIDTH);
 
     char c;
 

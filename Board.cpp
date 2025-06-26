@@ -18,14 +18,6 @@ Board::Board(int height, int width){
     this->width = width;
 }
 
-int Board::getHeight(){
-    return this->height;
-}
-
-int Board::getWidth(){
-    return this->width;
-}
-
 void Board::init(){
     clear();
     refresh();

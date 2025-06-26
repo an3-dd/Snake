@@ -1,14 +1,17 @@
-#pragma once 
+//#pragma once 
 
 #include <ncurses.h>
-
+#include "Position.hpp"
+#include "Const.hpp"
 
 class Snake{
 
 
     protected:
 
-    bool body[1][1];
+    bool body[WIDTH][HEIGHT]; //snake is a boolean matrix, length is in Const.hpp file
+    Position headPosition;
+    Position tailPosition;
     char headIcon;
     char bodyIcon;
 

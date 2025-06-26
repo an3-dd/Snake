@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ncurses.h>
+#include "Const.hpp"
 #include "Board.hpp"
 #include "Apple.hpp"
 
@@ -20,12 +21,6 @@ class Game{
     public:
 
     Game(int height, int width);
-
-    //Board getter
-
-    int getHeight();
-
-    int getWidth();
 
     //Board logic
 

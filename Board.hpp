@@ -1,25 +1,20 @@
 #include <ncurses.h>
 #include "Position.hpp"
+#include "Const.hpp"
 
 class Board{
 
     protected:
 
     WINDOW *win;
-    int height = 0;
-    int width = 0;
+    int height = HEIGHT;
+    int width = WIDTH;
 
 
 
     public:
 
     Board(int height, int width);
-
-    // return the board's heigth
-    int getHeight();
-
-    // return the board's width
-    int getWidth();
 
     // initialize the board
     void init();

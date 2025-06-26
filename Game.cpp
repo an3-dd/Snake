@@ -11,14 +11,6 @@ Game::Game(int height, int width): board(height, width){ //WAS , apple(0,0)
 }
 
 
-int Game::getHeight(){
-    return this->board.getHeight();
-}
-
-int Game::getWidth(){
-    return this->board.getWidth();
-}
-
 bool Game::isOver(){
     return gameOver;
 }
@@ -29,8 +21,8 @@ void Game::updateState(){
 
 Position Game::randomPosition(){
     Position p;
-    p.x = rand() % board.getWidth(); //is this correct?
-    p.y = rand() % board.getHeight();
+    p.x = rand() % WIDTH;
+    p.y = rand() % HEIGHT;
     return p;
 }
 
