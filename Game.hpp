@@ -28,8 +28,6 @@ class Game{
 
     void updateState();
 
-    void redraw();
-
     bool isOver();
 
 

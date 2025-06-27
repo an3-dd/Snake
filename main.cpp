@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include "Position.hpp"
 #include "Const.hpp"
 #include "Game.hpp"
 
@@ -9,6 +10,7 @@ int main(int argc, char ** argv){
     initscr();
     refresh();
     noecho();
+    curs_set(0);
 
     Game game(HEIGHT, WIDTH);
 
@@ -26,6 +28,8 @@ int main(int argc, char ** argv){
             Position p = game.randomPosition();
             game.printApple(p);
         }
+
+        refresh();
     }
 
 
