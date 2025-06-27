@@ -4,7 +4,7 @@
 #include <cstring>
 #include <menu.h>
 
-Menu::Menu(int h, int w):menuBoard(h, w){
+Menu::Menu(){
 
     initBoard();
     initLevels();

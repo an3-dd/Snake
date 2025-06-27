@@ -45,7 +45,7 @@ class Menu{
 
     public:
 
-    Menu(int height, int width);
+    Menu();
 
     void initBoard();
 
