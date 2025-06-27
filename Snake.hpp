@@ -4,6 +4,8 @@
 #include "Position.hpp"
 #include "Const.hpp"
 
+enum Direction {NONE, UP, DOWN, LEFT, RIGHT };
+
 class Snake{
 
 
@@ -12,6 +14,8 @@ class Snake{
     bool body[WIDTH][HEIGHT]; //snake is a boolean matrix, length is in Const.hpp file
     Position headPosition;
     Position tailPosition;
+    Direction currentDirection;
+
     char headIcon;
     char bodyIcon;
 

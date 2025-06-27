@@ -11,10 +11,12 @@ Snake::Snake(){
     int centerX = WIDTH/2;
     int centerY = HEIGHT/2;
     for(int i=0; i<SNAKE_LENGTH; i++){
-        body[centerX][centerY-i] = true;
+        body[centerX][centerY+i] = true;
     }
     headPosition = Position(centerX, centerY);
-    tailPosition = Position(centerX, centerY+1-SNAKE_LENGTH);
+    tailPosition = Position(centerX, centerY-1+SNAKE_LENGTH); //(0,0) in upper-left angle
+
+    currentDirection = NONE;
 
     headIcon = '@';
     bodyIcon = 'o';
@@ -34,5 +36,22 @@ char Snake::getHeadIcon(){
 
 char Snake::getBodyIcon(){
     return bodyIcon;
+}
+
+void Snake::move(){
+    switch(currentDirection){
+        case UP: moveUp(); break;
+        case DOWN: moveDown(); break;
+        case LEFT: moveLeft(); break;
+        case RIGHT: moveRight(); break;
+        default: break;
+    }
+}
+
+void Snake::moveUp(){
+
+    //remove tail and put it in head
+    body[tailPosition.x][tailPosition.y] = false;
+    tailPosition; //??
 }
 
