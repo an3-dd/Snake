@@ -4,6 +4,7 @@
 #include "Const.hpp"
 #include "Board.hpp"
 #include "Apple.hpp"
+#include "Snake.hpp"
 
 //for the randomizer
 #include "cstdlib"
@@ -15,12 +16,14 @@ class Game{
     protected:
 
     Board board;
+    Position center;
     bool gameOver;
     Apple apple[10]; //there are 10 apples on the screen, when one is eaten it respawns in another point
+    Snake snake;
 
     public:
 
-    Game(int height, int width);
+    Game();
 
     //Board logic
 
@@ -42,11 +45,9 @@ class Game{
 
     //Snake methods
 
-    // t is the position of the tail, h for the head
-    void printSnake(Position t, Position h);
+    void initPrintSnake();
 
-
-
+    void updatePrintSnake(Position h, Position t); //h is head, t is tail
 
 };
 

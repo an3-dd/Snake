@@ -3,7 +3,7 @@
 #include "Const.hpp"
 #include <ncurses.h>
 
-Board::Board(int height, int width){
+Board::Board(){
 
 
     int maxY, maxX;
@@ -11,21 +11,18 @@ Board::Board(int height, int width){
 
 
     // create a window in the center of the terminal
-    this->win = newwin(height, width, (maxY / 2) - (height / 2), (maxX / 2) - (width / 2));
+    this->win = newwin(HEIGHT, WIDTH, (maxY / 2) - (HEIGHT / 2), (maxX / 2) - (WIDTH / 2));
 
     init();
-    
-    this->height = height;
-    this->width = width;
 }
-
+/*
 int getHeigth(){
     return HEIGHT;
 }
 
 int getWidth(){
     return WIDTH;
-}
+}*/
 
 void Board::init(){
     clear();

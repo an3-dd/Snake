@@ -7,18 +7,16 @@ class Board{
     protected:
 
     WINDOW *win;
-    int height = HEIGHT;
-    int width = WIDTH;
-
-
+    //int height = HEIGHT;
+    //int width = WIDTH;
 
     public:
 
-    Board(int height, int width);
-
+    Board();
+/*
     int getWidth();
 
-    int getHeigth();
+    int getHeigth();*/
 
     // initialize the board
     void init();

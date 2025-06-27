@@ -20,11 +20,15 @@ class Snake{
 
     Snake();
 
-    // return the tail's coordinate
-    bool getTail();
-
     // return the head's coordinate
-    bool getHead();
+    Position getHead();
+
+    // return the tail's coordinate
+    Position getTail();
+
+    char getHeadIcon();
+
+    char getBodyIcon();
 
     // allow the snake to move
     void move();

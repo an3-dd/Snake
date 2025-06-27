@@ -12,9 +12,11 @@ int main(int argc, char ** argv){
     noecho();
     curs_set(0);
 
-    Game game(HEIGHT, WIDTH);
+    Game game;
 
     char c;
+
+    game.initPrintSnake();
 
     while(c != 'q'){
 

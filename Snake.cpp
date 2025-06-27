@@ -1,8 +1,8 @@
 #include "Snake.hpp"
 
 Snake::Snake(){
-    for (int x=0; x<HEIGHT; x++){ //initialization
-        for (int y=0; y<WIDTH; y++){
+    for (int x=0; x<WIDTH; x++){ //initialization
+        for (int y=0; y<HEIGHT; y++){
             body[x][y] = false;
         }
     }
@@ -16,8 +16,23 @@ Snake::Snake(){
     headPosition = Position(centerX, centerY);
     tailPosition = Position(centerX, centerY+1-SNAKE_LENGTH);
 
-    //graphic part of snake TODO
-
-    headIcon = '+'; //tbd
-    bodyIcon = 'O';
+    headIcon = '@';
+    bodyIcon = 'o';
 } 
+
+Position Snake::getHead(){
+    return headPosition;
+}
+
+Position Snake::getTail(){
+    return tailPosition;
+}
+
+char Snake::getHeadIcon(){
+    return headIcon;
+}
+
+char Snake::getBodyIcon(){
+    return bodyIcon;
+}
+
