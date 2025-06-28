@@ -38,20 +38,20 @@ char Snake::getBodyIcon(){
     return bodyIcon;
 }
 
-void Snake::move(){
-    switch(currentDirection){
-        case UP: moveUp(); break;
-        case DOWN: moveDown(); break;
-        case LEFT: moveLeft(); break;
-        case RIGHT: moveRight(); break;
-        default: break;
-    }
-}
-
-void Snake::moveUp(){
-
-    //remove tail and put it in head
-    body[tailPosition.x][tailPosition.y] = false;
-    tailPosition; //??
-}
-
+//void Snake::move(){
+//    switch(currentDirection){
+//        case UP: moveUp(); break;
+//        case DOWN: moveDown(); break;
+//        case LEFT: moveLeft(); break;
+//        case RIGHT: moveRight(); break;
+//        default: break;
+//    }
+//}
+//
+//void Snake::moveUp(){
+//
+//    //remove tail and put it in head
+//    body[tailPosition.x][tailPosition.y] = false;
+//    tailPosition; //??
+//}
+//

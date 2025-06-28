@@ -1,6 +1,5 @@
 #include <ncurses.h>
 #include "Position.hpp"
-#include "Const.hpp"
 
 class Board{
 
@@ -18,6 +17,9 @@ class Board{
 
     int getHeigth();*/
 
+    // return the board's window
+    WINDOW *getWin();
+
     // initialize the board
     void init();
 
@@ -33,6 +35,9 @@ class Board{
     // add a char in a point
     //WAS void addCharAt(int y, int x, chtype ch);
     void addCharAt(Position pos, chtype ch);
+
+    // add an array of char in position pos
+    void addStringAt(Position pos, char str[]);
 
     // return the button's code of a pressed button
     int getInput();

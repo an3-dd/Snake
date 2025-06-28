@@ -1,7 +1,7 @@
 #include <ncurses.h>
 #include "Position.hpp"
-#include "Const.hpp"
 #include "Game.hpp"
+#include <cstring>
 
 
 int main(int argc, char ** argv){
@@ -16,7 +16,7 @@ int main(int argc, char ** argv){
 
     char c;
 
-    game.initPrintSnake();
+    // game.initPrintSnake();
 
     while(c != 'q'){
 
@@ -29,6 +29,14 @@ int main(int argc, char ** argv){
         if (c == 'a'){
             Position p = game.randomPosition();
             game.printApple(p);
+        }
+        else if (c == 'b'){
+
+            char ciao[10];
+            strcpy(ciao, "ciao");
+            Position a = game.randomPosition();
+            game.getBoard().addStringAt(a, ciao);
+
         }
 
         refresh();

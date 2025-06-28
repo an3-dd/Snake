@@ -8,25 +8,14 @@
 
 struct Levels {
     char name[30];
-    int diff;
-    int bonus;
+    int diff = 0;
+    int bonus = 0; // bisogna assegnare unvalore di default
     int timeSec = 60;
     Levels *next;
     Levels *prev;
-
-    // è possibile anche inserire un costruttore all'interno della struttura 
-
-    // anche se il tempo del livello non è terminato deve essere possibile 
-    // cambiare livello durante la sua esecuzione
 };
 
-/*
-struct Player{
-    char nickname[50];
-    int score;
-    int position;
-};
-*/
+
 
 
 class Menu{
@@ -36,8 +25,8 @@ class Menu{
 
     Scriba scriba;
     Board menuBoard;
-    // Player player;
-    Levels *level;
+    Levels *head;
+    Levels *currentLevel;
     int choice = -1;
     bool isOpen;
 
@@ -47,7 +36,16 @@ class Menu{
 
     Menu();
 
+    // add a level in the list
+    bool addLevel(int d, char name[]);
+
+    // print all levels in the list
+    void printLevels();
+
     void initBoard();
+
+    // add an option to the menu board (play, view stats ...)
+    void addVoices();
 
     void open();
 
@@ -59,27 +57,17 @@ class Menu{
 
     int getChoice();
 
-    // init level's list
+    // add 3 default levels in the level's list
     void initLevels();
-
-    // return the choice
-    int select();
 
     void selectLevel();
 
     void viewPodium();
 
-    
-    // remove all players and score
+    // clan classifica.txt
     void cleanPodium();
 
-
     void addScore(char name[]);
-
-    // set the nickname and initialize score to 0
-    // void createPlayer(char c[]);
-
-    // void setName();
 
 
 

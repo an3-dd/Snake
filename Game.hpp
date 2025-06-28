@@ -27,6 +27,10 @@ class Game{
 
     //Board logic
 
+    Board getBoard();
+
+    void openMenu();
+
     void processInput();
 
     void updateState();

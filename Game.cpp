@@ -13,6 +13,11 @@ Game::Game(): board(){
 }
 
 
+Board Game::getBoard(){
+    return this->board;
+}
+
+
 
 bool Game::isOver(){
     return gameOver;

@@ -29,6 +29,10 @@ void Board::init(){
     refresh();
 }
 
+WINDOW *Board::getWin(){
+    return this->win;
+}
+
 void Board::addBorder(){
     box(win, 0, 0);
 }
@@ -45,6 +49,17 @@ void Board::refresh(){
 void Board::addCharAt(Position p, chtype ch){
     mvwaddch(win, p.y, p.x, ch);
     wrefresh(win);
+}
+
+void Board::addStringAt(Position p, char str[]){
+
+    int i = 0;
+
+    while (str[i] != '\0'){
+        addCharAt(p, str[i]);
+        p.x++;
+        i++;
+    }
 }
 
 int Board::getInput(){
