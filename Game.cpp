@@ -17,13 +17,12 @@ Board Game::getBoard(){
     return this->board;
 }
 
-
-
 bool Game::isOver(){
     return gameOver;
 }
 
 void Game::updateState(){
+    //updateSnake();
     //TODO
 }
 
@@ -35,6 +34,7 @@ Position Game::randomPosition(){
 }
 
 
+//APPLE METHODS
 void Game::printApple(Position p){
     if (board.isEmpty(p)) board.addCharAt(p, this->apple[0].getIcon()); //the apple index doesn't matter
 }
@@ -45,15 +45,35 @@ void Game::removeApple(Position p){
     }
 }
 
+
+//SNAKE METHODS
 void Game::initPrintSnake(){ //only called at the start
     //add head
     board.addCharAt(center, this->snake.getHeadIcon());
 
     //add body
-    Position delta = center; //delta is the position where to spawn the next segment
+    //delta is the position where to spawn the next segment
+    Position delta = center; 
     for(int i=1; i<SNAKE_LENGTH; i++){
         delta.y = center.y+i;
         board.addCharAt(delta, this->snake.getBodyIcon());
     }
+}
+
+void Game::updateSnake(Direction inputDirection){
+    //store the head position before movement
+    Position previousHead = snake.getHead();
+
+    snake.move(inputDirection);
+
+    //remove tail
+    board.rmCharAt(snake.getTail());
+
+    //draw body icon where the head was
+    board.addCharAt(previousHead, snake.getBodyIcon());
+
+    //draw new head
+    board.addCharAt(snake.getHead(), snake.getHeadIcon());
+
 }
 

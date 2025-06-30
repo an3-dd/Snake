@@ -51,7 +51,7 @@ class Game{
 
     void initPrintSnake();
 
-    void updatePrintSnake(Position h, Position t); //h is head, t is tail
+    void updateSnake(Direction inputDirection);
 
 };
 
