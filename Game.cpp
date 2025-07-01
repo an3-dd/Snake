@@ -1,10 +1,15 @@
 #include "Game.hpp"
+#include "Menu.hpp"
+#include "Position.hpp"
 #include <iostream>
+#include <ncurses.h>
+#include <cstring>
 using namespace std;
 
-Game::Game(): board(){
+Game::Game(): board(), menu(){
     srand(time(0));
     board.init();
+    this->openMenu();
     center.x = WIDTH/2;
     center.y = HEIGHT/2;
     this->gameOver = false;
@@ -12,6 +17,88 @@ Game::Game(): board(){
         apple[i] = Apple(randomPosition());
     }
 }
+
+void Game::openMenu(){
+    menu.open();
+    processInput();
+}
+
+void Game::processInput(){
+
+    switch (menu.getChoice()) {
+
+        case 0: startGame(); break;
+        case 1: /*scriba.showScores();*/ break;
+        case 2: 
+        menu.showLevels(); break;
+        case 3: exitGame(); break;
+        default : break;
+    
+    }
+}
+
+// void processLevel();
+
+
+// non funziona
+void Game::exitGame(){
+    if (menu.getChoice() == 3) {
+        refresh();
+        endwin();
+    }
+}
+
+
+void Game::startGame(){
+
+    board.init();
+    
+    board.refresh();
+
+    initPrintSnake();
+
+    char c;
+    while (c != 'q'){
+        c = getch();
+        switch (c) {
+
+            //movement
+            case 'w': updateSnake(UP); break;
+            case 's': updateSnake(DOWN); break;
+            case 'a': updateSnake(LEFT); break;
+            case 'd': updateSnake(RIGHT); break;
+            
+            //DEBUG print apple in random position
+            case 'k': {
+                Position p = randomPosition();
+                printApple(p); break;
+            }
+
+             //DEBUG print string
+             case 'b': {
+                 char ciao[10];
+                 strcpy(ciao, "ciao");
+                 Position a = randomPosition();
+                 getBoard().addStringAt(a, ciao); break;
+             }
+             //open menu
+             case 'm': openMenu(); break;
+
+            default: break;
+
+        }
+        refresh();
+    }
+
+    endwin();
+
+}
+
+
+Menu Game::getMenu(){
+    return this->menu;
+}
+
 
 
 Board Game::getBoard(){

@@ -2,9 +2,10 @@
 
 #include <ncurses.h>
 #include "Const.hpp"
-#include "Board.hpp"
+// #include "Board.hpp"
 #include "Apple.hpp"
 #include "Snake.hpp"
+#include "Menu.hpp"
 
 //for the randomizer
 #include "cstdlib"
@@ -16,6 +17,7 @@ class Game{
     protected:
 
     Board board;
+    Menu menu;
     Position center;
     bool gameOver;
     Apple apple[10]; //there are 10 apples on the screen, when one is eaten it respawns in another point
@@ -25,9 +27,13 @@ class Game{
 
     Game();
 
-    //Board logic
+    void startGame();
+
+    void exitGame();
 
     Board getBoard();
+
+    Menu getMenu();
 
     void openMenu();
 

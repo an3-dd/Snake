@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Board.hpp"
-#include "Scriba.hpp"
+// #include "Scriba.hpp"
 
 
 
@@ -23,18 +23,40 @@ class Menu{
 
     protected:
 
-    Scriba scriba;
+    // Scriba scriba;
+
+    // genera una finestra, è un costruttore di una board
     Board menuBoard;
-    Levels *head;
-    Levels *currentLevel;
+
+    Levels *head = nullptr;
+    // Levels *currentLevel;
     int choice = -1;
+    int level = -1;
     bool isOpen;
+
+
+
+
+    // add 3 default levels in the level's list
+    void initLevels();
+
+    // print options in the menu board (play, view stats ...)
+    void showOptions();
+
 
 
 
     public:
 
     Menu();
+
+    int getLevel();
+
+    void startGame();
+
+    void showScore();
+
+    void exitGame();
 
     // add a level in the list
     bool addLevel(int d, char name[]);
@@ -43,9 +65,6 @@ class Menu{
     void printLevels();
 
     void initBoard();
-
-    // add an option to the menu board (play, view stats ...)
-    void addVoices();
 
     void open();
 
@@ -57,15 +76,13 @@ class Menu{
 
     int getChoice();
 
-    // add 3 default levels in the level's list
-    void initLevels();
 
-    void selectLevel();
+    void showLevels();
 
     void viewPodium();
 
     // clan classifica.txt
-    void cleanPodium();
+    // void cleanPodium();
 
     void addScore(char name[]);
 

@@ -6,21 +6,27 @@
 
 int main(int argc, char ** argv){
 
-    initscr();
-    refresh();
-    noecho();
-    curs_set(0);
+    // initscr();
+    // refresh();
+    // noecho();
+    // curs_set(0);
 
     Game game;
 
     char c;
 
-    game.initPrintSnake();
+    // game.initPrintSnake();
 
+    game.openMenu();
+
+/*
     while(c != 'q'){
 
         c = getch();
         switch (c) {
+
+
+
 
             //movement
             case 'w': game.updateSnake(UP); break;
@@ -34,15 +40,15 @@ int main(int argc, char ** argv){
                 game.printApple(p); break;
             }
 
-            //DEBUG print string
-            case 'b': {
-                char ciao[10];
-                strcpy(ciao, "ciao");
-                Position a = game.randomPosition();
-                game.getBoard().addStringAt(a, ciao); break;
-            }
-            //open menu
-            //case 'm': TODO; break;
+             //DEBUG print string
+             case 'b': {
+                 char ciao[10];
+                 strcpy(ciao, "ciao");
+                 Position a = game.randomPosition();
+                 game.getBoard().addStringAt(a, ciao); break;
+             }
+             //open menu
+             case 'm': game.openMenu(); break;
 
             default: break;
 
@@ -51,6 +57,6 @@ int main(int argc, char ** argv){
     }
 
     endwin();
-
+*/
     return 0;
 }

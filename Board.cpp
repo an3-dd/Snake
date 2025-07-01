@@ -5,9 +5,11 @@
 
 Board::Board(){
 
+    initscr();
 
     int maxY, maxX;
     getmaxyx(stdscr, maxY, maxX);
+
 
 
     // create a window in the center of the terminal
@@ -15,16 +17,11 @@ Board::Board(){
 
     init();
 }
-/*
-int getHeigth(){
-    return HEIGHT;
-}
-
-int getWidth(){
-    return WIDTH;
-}*/
 
 void Board::init(){
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
     clear();
     refresh();
 }

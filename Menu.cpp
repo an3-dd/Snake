@@ -1,4 +1,4 @@
-#pragma once
+// #pragma once
 
 #include "Menu.hpp"
 #include "Const.hpp"
@@ -12,13 +12,15 @@ using namespace std;
 
 Menu::Menu(){
 
-    initBoard();
-    initLevels();
-    cleanPodium();
+  initBoard();
+  initLevels();
+  showOptions();
+  // cleanPodium();
 
 }
 
 
+// aggiunge i livelli alla lista bidirezionale
 bool Menu::addLevel(int d, char name[]) {
 
   bool done = false;
@@ -26,15 +28,14 @@ bool Menu::addLevel(int d, char name[]) {
   Levels *n = new Levels;
   n->diff = d;
   strcpy(n->name, name);
-  n->timeSec *= n->diff;
-  n->bonus *= n->diff;
+  n->timeSec *= 10 * n->diff;
+  n->bonus *= 5 * n->diff;
   n->prev = nullptr;
   n->next = nullptr;
 
   Levels *p = head;
 
   if (head == nullptr) {
-    head = new Levels;
     head = n;
     return true;
   }
@@ -42,12 +43,13 @@ bool Menu::addLevel(int d, char name[]) {
 
     while (!done) {
       if (p->diff == n->diff) {
+        delete n;
         return false;
       } else {
         if (n->diff < p->diff) {
           if (p->prev == nullptr) {
-            p->prev = n;
             n->next = p;
+            p->prev = n;
             n->prev = nullptr;
             head = n;
             done = true;
@@ -72,6 +74,11 @@ bool Menu::addLevel(int d, char name[]) {
   return done;
 }
 
+
+int Menu::getLevel(){
+  return level;
+}
+
 void Menu::printLevels() {
 
   Levels *p = head;
@@ -89,76 +96,154 @@ void Menu::printLevels() {
 
 void Menu::initLevels(){
 
-    char facile[] = "facile";
-    char medio[] = "medio";
-    char difficile[] = "difficile";
+  char facile[] = "facile";
+  char medio[] = "medio";
+  char difficile[] = "difficile";
 
-    addLevel(1, facile);
-    addLevel(2, medio);
-    addLevel(3, difficile);
+  addLevel(1, facile);
+  addLevel(2, medio);
+  addLevel(3, difficile);
 }
 
 
 void Menu::initBoard(){
-    menuBoard.init();
+  menuBoard.init();
 }
 
-void Menu::addVoices(){
+void Menu::showOptions(){
 
-    char* voices[] = {"GIOCA", "CLASSIFICA", "SELEZIONA LIVELLO", "ESCI"};
-    int numVoices = 4;
-    int selected = 0;
-    int input;
-    Position center;
-    center.x = WIDTH/2;
-    center.y = HEIGHT/2; 
+  char gioca[] = "GIOCA";
+  char classifica[] = "VEDI CLASSIFICA";
+  char seleziona[] = "SELEZIONA LIVELLO";
+  char esci[] = "ESCI";
 
-    keypad(menuBoard.getWin(), TRUE);
-    curs_set(0);
 
-    while (1){
 
-      menuBoard.clear();
 
-      for (int i = 0; i < numVoices; i++){
-        if (i == selected){
-          wattron(menuBoard.getWin(), A_REVERSE);
-          menuBoard.addStringAt(center, voices[i]);
-          wattroff(menuBoard.getWin(), A_REVERSE);
-        }
-        else menuBoard.addStringAt(center, voices[i]);
+
+  char* voices[] = {gioca, classifica, seleziona, esci};
+  int numVoices = 4;
+  int selected = 0;
+  int input;
+
+
+
+
+  // int height, width;
+  // getmaxyx(menuBoard.getWin(), height, width);
+  // int start_y = (height - numVoices) / 2;
+  // int x = width / 2;  // centro orizzontale
+
+
+
+  Position center;
+  Position pos;
+  center.x = WIDTH/2;
+  center.y = HEIGHT/2; 
+  keypad(menuBoard.getWin(), TRUE);
+  curs_set(0);
+  while (1){
+    menuBoard.clear();
+    for (int i = 0; i < numVoices; i++){
+      pos.x = center.x;
+      pos.y = (HEIGHT - numVoices) / 2 + i;
+      if (i == selected){
+        wattron(menuBoard.getWin(), A_REVERSE);
+        menuBoard.addStringAt(pos, voices[i]);
+        wattroff(menuBoard.getWin(), A_REVERSE);
       }
-
-      menuBoard.refresh();
-
-      input = menuBoard.getInput();
-
-      switch (input){
-        case KEY_UP:
-          selected = (selected - 1 + numVoices) % numVoices;
-          break;
-        case KEY_DOWN:
-          selected = (selected + 1) % numVoices;
-          break;
-        case '\n':
-          this->choice = selected;
-          return;
-      }
+      else menuBoard.addStringAt(pos, voices[i]);
     }
+    menuBoard.refresh();
+    input = menuBoard.getInput();
+    switch (input){
+      case KEY_UP:
+        selected = (selected - 1 + numVoices) % numVoices;
+        break;
+      case KEY_DOWN:
+        selected = (selected + 1) % numVoices;
+        break;
+      case '\n':
+        this->choice = selected;
+        return;
+    }
+  }
 }
 
 void Menu::open(){
-    initBoard();
+
+
+  menuBoard.clear();
+  menuBoard.refresh();
+
+
+  showOptions();
+
 }
 
-void Menu::selectLevel(){
+void Menu::showLevels(){
+  char facile[] = "FACILE";
+  char medio[] = "MEDIO";
+  char difficile[] = "DIFFICILE";
+  char indietro[] = "INDIETRO";
+
+
+
+
+
+  char* voices[] = {facile, medio, difficile, indietro};
+  int numVoices = 4;
+  int selected = 0;
+  int input;
+
+
+
+
+  // int height, width;
+  // getmaxyx(menuBoard.getWin(), height, width);
+  // int start_y = (height - numVoices) / 2;
+  // int x = width / 2;  // centro orizzontale
+
+
+
+  Position center;
+  Position pos;
+  center.x = WIDTH/2;
+  center.y = HEIGHT/2; 
+  keypad(menuBoard.getWin(), TRUE);
+  curs_set(0);
+  while (1){
+    menuBoard.clear();
+    for (int i = 0; i < numVoices; i++){
+      pos.x = center.x;
+      pos.y = (HEIGHT - numVoices) / 2 + i;
+      if (i == selected){
+        wattron(menuBoard.getWin(), A_REVERSE);
+        menuBoard.addStringAt(pos, voices[i]);
+        wattroff(menuBoard.getWin(), A_REVERSE);
+      }
+      else menuBoard.addStringAt(pos, voices[i]);
+    }
+    menuBoard.refresh();
+    input = menuBoard.getInput();
+    switch (input){
+      case KEY_UP:
+        selected = (selected - 1 + numVoices) % numVoices;
+        break;
+      case KEY_DOWN:
+        selected = (selected + 1) % numVoices;
+        break;
+      case '\n':
+        this->level = selected;
+        return;
+    }
+  }
 
 }
 
 int Menu::getChoice(){
-    return this->choice;
+  return this->choice;
 }
-
 
 
 
