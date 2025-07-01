@@ -1,5 +1,6 @@
 #include "Game.hpp"
-
+#include <iostream>
+using namespace std;
 
 Game::Game(): board(){
     srand(time(0));
@@ -61,13 +62,21 @@ void Game::initPrintSnake(){ //only called at the start
 }
 
 void Game::updateSnake(Direction inputDirection){
+    
     //store the head position before movement
     Position previousHead = snake.getHead();
 
-    snake.move(inputDirection);
+    Position oldTail = snake.move(inputDirection);
+
+    char buf[100];
+    sprintf(buf, "PrevHead:(%d,%d) OldTail:(%d,%d) Head:(%d,%d)\n",
+        previousHead.x, previousHead.y,
+        oldTail.x, oldTail.y,
+        snake.getHead().x, snake.getHead().y);
+    std::cerr << buf;
 
     //remove tail
-    board.rmCharAt(snake.getTail());
+    board.rmCharAt(oldTail);
 
     //draw body icon where the head was
     board.addCharAt(previousHead, snake.getBodyIcon());

@@ -67,14 +67,13 @@ int Board::getInput(){
 }
 
 char Board::getCharAt(Position p){
-    chtype ch = mvinch(p.y, p.x);
-    char c = ch & A_CHARTEXT;
-
-    return c;
+    chtype ch = mvwinch(win, p.y, p.x);
+    return ch & A_CHARTEXT;
 }
 
 void Board::rmCharAt(Position p){
     mvwaddch(win, p.y, p.x, ' ');
+    wrefresh(win);
 }
 
 bool Board::isEmpty(Position p){

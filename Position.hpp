@@ -1,4 +1,4 @@
-#pragma once   //maybe makes errors
+#pragma once
 
 struct Position {
     int x;
