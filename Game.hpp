@@ -33,6 +33,10 @@ class Game{
 
     void exitGame();
 
+    void showScore();
+
+    Scriba getScriba();
+
     Board getBoard();
 
     Menu getMenu();

@@ -47,13 +47,14 @@ void Game::processInput(){
     switch (scelta) {
 
         case 0: startGame(); break;
-        case 1: scriba.showScores(); break;
-        case 2: menu.showLevels(); break;
+        case 1: scriba.showScores(); openMenu(); break;
+        case 2: menu.showLevels(); openMenu(); break;
         case 3: exitGame(); break;
         default : break;
     }
     menu.resetChoice();
 }
+
 
 // void processLevel();
 
@@ -73,10 +74,11 @@ void Game::startGame(){
     board.addBorder();
     
     board.refresh();
-
     initPrintSnake();
 
-    char c = '\0';
+
+
+    char c;
     while (!gameOver && c != 'q'){
         c = getch();
         switch (c) {
@@ -106,12 +108,17 @@ void Game::startGame(){
             default: break;
 
         }
-        refresh();
+        board.clear();
+        board.refresh();
     }
 
     endwin();
     exit(0);
 
+}
+
+Scriba Game::getScriba(){
+    return scriba;
 }
 
 

@@ -12,7 +12,7 @@ using namespace std;
 
 struct ScoreEntry {
     int points;
-    char level[50];
+    char level[50] = {0};
 };
 
 
@@ -45,6 +45,11 @@ public:
 
     // costruttore
     Scriba();
+
+    // remove the file's content
+    void cleanPodium();
+
+    void initBoard();
 
     int getCount();
 

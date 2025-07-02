@@ -2,11 +2,17 @@
 #include "Const.hpp"
 #include "Position.hpp"
 #include <cstdio>
+#include <ncurses.h>
+#include <string>
 
 
 Scriba::Scriba(){
-    scoreBoard.init();
+    initBoard();
 };
+
+void Scriba::initBoard(){
+    scoreBoard.init();
+}
 
 
 int Scriba::getCount(){
@@ -15,8 +21,8 @@ int Scriba::getCount(){
 
 
 void Scriba::sortScores() {
-    for (int i = 0; i < count - 1; i++) {
-        for (int j = 0; j < count - i - 1; j++) {
+    for (int i = 0; i < MAX_SCORES - 1; i++) {
+        for (int j = 0; j < MAX_SCORES - i - 1; j++) {
             if (scores[j].points < scores[j+1].points) {
                 ScoreEntry temp = scores[j];
                 scores[j] = scores[j+1];
@@ -37,94 +43,100 @@ void Scriba::saveScore(int points, const char* level) {
     }
 
     // se non si verificano errori, scrive in ofs, points "modalità: " level 
-    ofs << points << "   modalità: " << level << "\n";
+    ofs << points << " " << level << "\n";
 }
 
 
 void Scriba::showScores() {
-
-    // apre il file classifica.txt
     ifstream ifs("classifica.txt");
     if (!ifs) {
         cerr << "Errore nell'aprire il file per leggere\n";
         return;
     }
 
-    int count = 0;
-    int pts;
-    char lvl[50];
-
-    // usa l'operatore di estrazione >> per leggere cio che 
-    // si trova in quella riga del file e metterlo nelle variabili
-    // il ciclo si interrompe quando non riesce a leggere punteggio o livello]
-    while (ifs >> pts >> lvl) {
-        if (count < MAX_SCORES) {
-            scores[count].points = pts;
-            strncpy(scores[count].level, lvl, 49);
-            scores[count].level[49] = '\0';
-            count++;
-        }
+    // Inizializzo scores
+    for (int i = 0; i < MAX_SCORES; ++i) {
+        scores[i].points = 0;
+        scores[i].level[0] = '\0';
     }
 
+    char line[100];
+    int count = 0;
 
-    // ordina mediante bubblesort tutti i pinteggi
-    // che sono stati memorizzati all'interno dell'array di scores
+    while (count < MAX_SCORES && ifs.getline(line, sizeof(line))) {
+        if (line[0] == '\0') continue;  // salto righe vuote
+
+        // Cerco il primo spazio per separare punti e livello
+        char* spacePos = strchr(line, ' ');
+        if (!spacePos) continue; // se non c'è spazio salto
+
+        // Divido la stringa in due: 
+        *spacePos = '\0';  // fine punteggio
+        char* ptsStr = line;
+        char* lvlStr = spacePos + 1;
+
+        // Converto punti a int
+        int pts = atoi(ptsStr);
+
+        // Copio il livello in modo sicuro
+        strncpy(scores[count].level, lvlStr, 49);
+        scores[count].level[49] = '\0';
+
+        scores[count].points = pts;
+
+        count++;
+    }
+
     sortScores();
 
-    //for (int i = count - 1; i >= 0; i++){
-    int i = 0;
-        Position center;
-        Position pos;
-        center.x = WIDTH/2;
-        center.y = HEIGHT/2;
-        pos.x = center.x;
+    scoreBoard.clear();
+
+    Position pos;
+    for (int i = 0; i < count; i++) {
+        pos.x = WIDTH / 2;
         pos.y = (HEIGHT - count) / 2 + i;
 
-        // creazione della stringa che voglio aggiungere
-        //// estrapolandola dall'array scores che prende le informazioni da classifica.txt
-        //char puntiLivello[] = " punti - Livello: ";
-        //char strMatch[49] = strcat((char)scores[i].points, puntiLivello, (char[])scores[i].level);
         char strMatch[100];
-        sprintf(strMatch, "%d punti - Livello: %s", scores[i].points, scores[i].level);
-        this->scoreBoard.addStringAt(center, strMatch);
-        printf("\n");
-
-
-    //}
-    scoreBoard.clear();
-    scoreBoard.refresh();
-
-
-    /*
-  Position center;
-  Position pos;
-  center.x = WIDTH/2;
-  center.y = HEIGHT/2; 
-  keypad(menuBoard.getWin(), TRUE);
-  curs_set(0);
-  while (1){
-    menuBoard.clear();
-    for (int i = 0; i < numVoices; i++){
-      pos.x = center.x;
-      pos.y = (HEIGHT - numVoices) / 2 + i;
-      if (i == selected){
-        wattron(menuBoard.getWin(), A_REVERSE);
-        menuBoard.addStringAt(pos, voices[i]);
-        wattroff(menuBoard.getWin(), A_REVERSE);
-      }
-      else menuBoard.addStringAt(pos, voices[i]);
+        snprintf(strMatch, sizeof(strMatch), "%d punti - Livello: %s", scores[i].points, scores[i].level);
+        scoreBoard.addStringAt(pos, strMatch);
     }
-    menuBoard.refresh();*/
 
+    Position adv;
+    adv.x = 2;
+    adv.y = 3;
 
-//    cout << "Classifica punteggi:\n";
-//    for (int i = 0; i < i; i++) {
-//        cout << i << " " << scores[i].points << " punti - Livello: " << scores[i].level << "\n";
-//    }
-
-
-
-
+    char menu[] = {"premi qualsiasi tasto per tornare al menu \n"};
+    char reset[] = {" oppure premi c per resettare tutta la classifica"};
 
     
+
+
+    scoreBoard.addStringAt(adv, menu);
+    adv.y++;
+
+    scoreBoard.addStringAt(adv, reset);
+
+    scoreBoard.addBorder();
+
+    scoreBoard.refresh();
+
+    // Aspetta input dell'utente per tornare al menu
+    int c = scoreBoard.getInput();
+
+    if (c == 'c' || "C"){
+        cleanPodium();
+    }
 }
+
+void Scriba::cleanPodium() {
+    ofstream ofs("classifica.txt", ios::trunc);  // apertura in modalità truncate che cancella l'intero contenuto del file
+    if (!ofs) {
+        cerr << "Errore nell'aprire il file per la pulizia\n";
+        return;
+    }
+    ofs.close();
+}
+
+
+
+

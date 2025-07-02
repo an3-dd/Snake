@@ -13,11 +13,7 @@ int main(int argc, char ** argv){
 
     Game game;
 
-    //game.getMenu().initBoard();
-
-//    char c;
-
-    // game.initPrintSnake();
+    // game.getScriba().saveScore(190, "impossibile");
 
     game.openMenu();
 
