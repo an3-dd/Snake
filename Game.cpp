@@ -1,3 +1,5 @@
+
+
 #include "Game.hpp"
 #include "Menu.hpp"
 #include "Position.hpp"
@@ -6,14 +8,29 @@
 #include <cstring>
 using namespace std;
 
-Game::Game(): board(), menu(){
+
+
+
+
+// inutile perche il costruttor inzializza
+// automaticamente tutti gli oggetti al suo interno
+// Game::Game(): board(), menu(){
+
+// questo serve solo quando vogliamo usare un cstruttore
+// diverso da quello di default
+Game::Game(){
     srand(time(0));
-    board.init();
-    this->openMenu();
+
+// anche questo è inutile
+    // board.init();
+    // menu.initBoard();
+    // this->openMenu();
+
+
     center.x = WIDTH/2;
     center.y = HEIGHT/2;
     this->gameOver = false;
-    for(int i=0; i<10; i++){
+    for(int i = 0; i < 10; i++){
         apple[i] = Apple(randomPosition());
     }
 }
@@ -25,40 +42,42 @@ void Game::openMenu(){
 
 void Game::processInput(){
 
-    switch (menu.getChoice()) {
+    int scelta = menu.getChoice();
+
+    switch (scelta) {
 
         case 0: startGame(); break;
-        case 1: /*scriba.showScores();*/ break;
-        case 2: 
-        menu.showLevels(); break;
+        case 1: scriba.showScores(); break;
+        case 2: menu.showLevels(); break;
         case 3: exitGame(); break;
         default : break;
-    
     }
+    menu.resetChoice();
 }
 
 // void processLevel();
 
 
-// non funziona
+// funziona solo se lo schiacci due volte
 void Game::exitGame(){
-    if (menu.getChoice() == 3) {
-        refresh();
-        endwin();
-    }
+    flushinp();
+    endwin();
+    exit(0);
 }
 
 
 void Game::startGame(){
 
     board.init();
+
+    board.addBorder();
     
     board.refresh();
 
     initPrintSnake();
 
-    char c;
-    while (c != 'q'){
+    char c = '\0';
+    while (!gameOver && c != 'q'){
         c = getch();
         switch (c) {
 
@@ -91,6 +110,7 @@ void Game::startGame(){
     }
 
     endwin();
+    exit(0);
 
 }
 

@@ -1,7 +1,7 @@
 #include <ncurses.h>
-#include "Position.hpp"
+// #include "Position.hpp"
 #include "Game.hpp"
-#include <cstring>
+// #include <cstring>
 
 
 int main(int argc, char ** argv){
@@ -13,11 +13,15 @@ int main(int argc, char ** argv){
 
     Game game;
 
-    char c;
+    //game.getMenu().initBoard();
+
+//    char c;
 
     // game.initPrintSnake();
 
     game.openMenu();
+
+    // exit(0);
 
 /*
     while(c != 'q'){

@@ -105,7 +105,7 @@ void Menu::initLevels(){
   addLevel(3, difficile);
 }
 
-
+// Board::init()
 void Menu::initBoard(){
   menuBoard.init();
 }
@@ -118,22 +118,10 @@ void Menu::showOptions(){
   char esci[] = "ESCI";
 
 
-
-
-
   char* voices[] = {gioca, classifica, seleziona, esci};
   int numVoices = 4;
   int selected = 0;
   int input;
-
-
-
-
-  // int height, width;
-  // getmaxyx(menuBoard.getWin(), height, width);
-  // int start_y = (height - numVoices) / 2;
-  // int x = width / 2;  // centro orizzontale
-
 
 
   Position center;
@@ -165,20 +153,22 @@ void Menu::showOptions(){
         break;
       case '\n':
         this->choice = selected;
+        mvprintw(0, 0, "Scelta fatta: %d  ", choice);
         return;
     }
   }
 }
 
+// void Menu::haiPremuto(){
+//   chtype a;
+//   a = menuBoard.getInput();
+//   cout << "hai premuto: " << a << endl;
+// }
+
 void Menu::open(){
-
-
   menuBoard.clear();
   menuBoard.refresh();
-
-
   showOptions();
-
 }
 
 void Menu::showLevels(){
@@ -187,24 +177,10 @@ void Menu::showLevels(){
   char difficile[] = "DIFFICILE";
   char indietro[] = "INDIETRO";
 
-
-
-
-
   char* voices[] = {facile, medio, difficile, indietro};
   int numVoices = 4;
   int selected = 0;
   int input;
-
-
-
-
-  // int height, width;
-  // getmaxyx(menuBoard.getWin(), height, width);
-  // int start_y = (height - numVoices) / 2;
-  // int x = width / 2;  // centro orizzontale
-
-
 
   Position center;
   Position pos;
@@ -236,6 +212,7 @@ void Menu::showLevels(){
       case '\n':
         this->level = selected;
         return;
+      default: break;
     }
   }
 
@@ -243,6 +220,10 @@ void Menu::showLevels(){
 
 int Menu::getChoice(){
   return this->choice;
+}
+
+void Menu::resetChoice(){
+  this->choice = -1;
 }
 
 

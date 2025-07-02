@@ -1,34 +1,64 @@
-#pragma once 
-
 #include <fstream>
+#include <iostream>
+#include <cstring>
+#include "Board.hpp"
 
 
 
-class Scriba{
 
-    protected:
-
-    char filename[20];
+using namespace std;
 
 
 
-    public:
+struct ScoreEntry {
+    int points;
+    char level[50];
+};
 
+
+
+
+class Scriba {
+
+
+protected:
+
+
+    static const int MAX_SCORES = 100;
+    Board scoreBoard;
+
+
+    // l'array scores tiene un massimo di punteggi che la classifica puo immagazzinare
+    // la variabile coutn, ci dice quanti ce ne sono memorizzati al momento
+    ScoreEntry scores[MAX_SCORES];
+    int count = 0;
+
+
+    // semplice bubble sort decrescente per points
+    void sortScores();
+
+
+    
+
+public:
+
+
+    // costruttore
     Scriba();
 
-    // serve una funzione che fetcha il nome del giocatore e i punti che ha fatto
-    // il nome del giocatore si trova all'interno del menu
+    int getCount();
 
-    // il giocatore deve inserire 
-
-    // add a raw in classifica.txt with the player's name and its score 
-    void addScore(char name[], int points);
-
-    // 
+    // funzione che salva le score all'interno del file classifica.txt
+    // mediante l'uso di ofstream
+    void saveScore(int points, const char* level);
 
 
 
-
+    // funzione che mostra i dati salvati all'interno del file classifica.txt
+    // mediante l'uso di ifstream
+    void showScores();
 
 
 };
+
+

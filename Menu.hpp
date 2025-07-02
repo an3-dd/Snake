@@ -40,15 +40,16 @@ class Menu{
     // add 3 default levels in the level's list
     void initLevels();
 
-    // print options in the menu board (play, view stats ...)
-    void showOptions();
-
-
-
-
     public:
 
     Menu();
+
+    void haiPremuto();
+
+    // print options in the menu board (play, view stats ...)
+    // questa funzione al termine della sua esecuzione setta il parametro
+    // choice in base alla voce sulla quale è stato premuto invio
+    void showOptions();
 
     int getLevel();
 
@@ -76,7 +77,6 @@ class Menu{
 
     int getChoice();
 
-
     void showLevels();
 
     void viewPodium();
@@ -86,6 +86,8 @@ class Menu{
 
     void addScore(char name[]);
 
+    // set the parameter choice to -1
+    void resetChoice();
 
 
 };

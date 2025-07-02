@@ -1,11 +1,12 @@
 #pragma once
 
+
 #include <ncurses.h>
 #include "Const.hpp"
-// #include "Board.hpp"
 #include "Apple.hpp"
 #include "Snake.hpp"
 #include "Menu.hpp"
+#include "Scriba.hpp"
 
 //for the randomizer
 #include "cstdlib"
@@ -22,6 +23,7 @@ class Game{
     bool gameOver;
     Apple apple[10]; //there are 10 apples on the screen, when one is eaten it respawns in another point
     Snake snake;
+    Scriba scriba;
 
     public:
 
@@ -58,6 +60,7 @@ class Game{
     void initPrintSnake();
 
     void updateSnake(Direction inputDirection);
+
 
 };
 
