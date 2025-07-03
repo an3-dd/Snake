@@ -1,9 +1,7 @@
 #include "Scriba.hpp"
 #include "Const.hpp"
 #include "Position.hpp"
-#include <cstdio>
 #include <ncurses.h>
-#include <string>
 
 
 Scriba::Scriba(){
