@@ -130,7 +130,7 @@ void Menu::showOptions(){
   center.y = HEIGHT/2; 
   keypad(menuBoard.getWin(), TRUE);
   curs_set(0);
-  while (1){ //???
+  while (true){ //DA TOGLIERE PRE
     menuBoard.clear();
     for (int i = 0; i < numVoices; i++){
       pos.x = center.x;
@@ -188,7 +188,7 @@ void Menu::showLevels(){
   center.y = HEIGHT/2; 
   keypad(menuBoard.getWin(), TRUE);
   curs_set(0);
-  while (1){
+  while (true){
     menuBoard.clear();
     for (int i = 0; i < numVoices; i++){
       pos.x = center.x;
