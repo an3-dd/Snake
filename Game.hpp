@@ -12,6 +12,8 @@
 #include "cstdlib"
 #include "ctime"
 
+enum GameState {onGame, onMenu, onPause, onDeathScreen};
+
 class Game{
 
 
@@ -20,10 +22,13 @@ class Game{
     Board board;
     Menu menu;
     Position center;
-    bool gameOver;
+   
     Apple apple[10]; //there are 10 apples on the screen, when one is eaten it respawns in another point
     Snake snake;
     Scriba scriba;
+
+    //uso un enum al posto di un booleano per capire in che stato si trova il gioco
+    GameState gameState; // bool gameOver;
 
     public:
 
@@ -45,9 +50,9 @@ class Game{
 
     void processInput();
 
-    void updateState();
+    void openDeathScreen();
 
-    bool isOver();
+    GameState getGameState();
 
 
     //Apple methods

@@ -1,4 +1,6 @@
 #include "Snake.hpp"
+#include <iostream>
+using namespace std;
 
 Snake::Snake(){
     for (int x=0; x<WIDTH; x++){ //initialization
@@ -42,81 +44,35 @@ char Snake::getBodyIcon(){
     return bodyIcon;
 }
 
-Position Snake::move(Direction inputDirection) {
-    // Prevent 180° reversal
-    switch (inputDirection) {
-        case UP:    if (currentDirection == DOWN) inputDirection = NONE; break;
-        case DOWN:  if (currentDirection == UP) inputDirection = NONE; break;
-        case LEFT:  if (currentDirection == RIGHT) inputDirection = NONE; break;
-        case RIGHT: if (currentDirection == LEFT) inputDirection = NONE; break;
-        default: break;
-    }
-
-    // Update direction if valid
-    if (inputDirection != NONE) currentDirection = inputDirection;
-
-    // Calculate new head position
-    Position newHead = headPosition;
-    switch (currentDirection) {
-        case UP:    newHead.y = (newHead.y - 1 + HEIGHT) % HEIGHT; break;
-        case DOWN:  newHead.y = (newHead.y + 1) % HEIGHT; break;
-        case LEFT:  newHead.x = (newHead.x - 1 + WIDTH) % WIDTH; break;
-        case RIGHT: newHead.x = (newHead.x + 1) % WIDTH; break;
-        default: break;
-    }
-
-    // Mark new head position
-    body[newHead.x][newHead.y] = true;
-    headPosition = newHead;
-
-    //Save old tail position to return it
-    Position oldTail = tailPosition;
-
-    // Clear the old tail position
-    body[tailPosition.x][tailPosition.y] = false;
-
-    // Get tail direction from circular buffer
-    Direction tailDirection = dirHistory[indexCircular];
-
-    // Update tail position based on old direction
-    switch (tailDirection) {
-        case UP:    tailPosition.y = (tailPosition.y - 1 + HEIGHT) % HEIGHT; break;
-        case DOWN:  tailPosition.y = (tailPosition.y + 1) % HEIGHT; break;
-        case LEFT:  tailPosition.x = (tailPosition.x - 1 + WIDTH) % WIDTH; break;
-        case RIGHT: tailPosition.x = (tailPosition.x + 1) % WIDTH; break;
-        default: break;
-    }
-
-    // Store the current movement direction for next tail update
-    dirHistory[indexCircular] = currentDirection;
-
-    // Move circular index
-    indexCircular = (indexCircular + 1) % SNAKE_LENGTH;
-
-    return oldTail;
+bool Snake::snakeIsHere(Position p){
+    return body[p.x][p.y];
 }
 
-/*void Snake::move(Direction inputDirection) {
+bool Snake::move(Direction inputDirection) {
 
     //we first check if the direction is valid, we set it to none if not valid
     switch (inputDirection) {
-        case UP:
-        if(currentDirection == DOWN) inputDirection = NONE; break;
-        case DOWN:
-        if(currentDirection == UP) inputDirection = NONE; break;
-        case LEFT:
-        if(currentDirection == RIGHT) inputDirection = NONE; break;
-        case RIGHT:
-        if(currentDirection == LEFT) inputDirection = NONE; break;
+        case UP:{
+            if(currentDirection == DOWN) inputDirection = NONE; break;
+        }
+        case DOWN:{
+            if(currentDirection == UP) inputDirection = NONE; break;
+        }
+        case LEFT:{
+            if(currentDirection == RIGHT) inputDirection = NONE; break;
+        }
+        case RIGHT:{
+            if(currentDirection == LEFT) inputDirection = NONE; break;
+        }
         default: break;
     }
     //if there is a valid input direction, change the current direction to that
     if (inputDirection != NONE) currentDirection = inputDirection;
 
-    //set tailDirection
-    Direction tailDirection = dirHistory[indexCircular];
-
-    //save this direction in history
+    //set tailDirection as the direction the head had a cycle before
+    Direction tailDirection = dirHistory[(indexCircular + 1) % SNAKE_LENGTH]; //LA CODA FUNZIONA CON +1
+    
+    //save the current direction in history
     dirHistory[indexCircular] = currentDirection;
 
     //calculate new head position
@@ -128,6 +84,9 @@ Position Snake::move(Direction inputDirection) {
         case RIGHT: newHead.x = (newHead.x + 1) % WIDTH; break;
         default: break;
     }
+
+    //check if it collides with himself, if it does, return false
+    if(snakeIsHere(newHead)) return false;
 
     //update the head
     body[newHead.x][newHead.y] = true;
@@ -145,6 +104,10 @@ Position Snake::move(Direction inputDirection) {
 
     //increment the index for the next movement
     indexCircular = (indexCircular + 1) % SNAKE_LENGTH;
-}*/
+
+    //movement was succesful
+    return true;
+
+}
 
 

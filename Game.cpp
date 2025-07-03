@@ -1,5 +1,3 @@
-
-
 #include "Game.hpp"
 #include "Menu.hpp"
 #include "Position.hpp"
@@ -8,36 +6,29 @@
 #include <cstring>
 using namespace std;
 
-
-
-
-
 // inutile perche il costruttor inzializza
 // automaticamente tutti gli oggetti al suo interno
 // Game::Game(): board(), menu(){
-
 // questo serve solo quando vogliamo usare un cstruttore
 // diverso da quello di default
+
 Game::Game(){
     srand(time(0));
-
-// anche questo è inutile
-    // board.init();
-    // menu.initBoard();
-    // this->openMenu();
-
-
     center.x = WIDTH/2;
     center.y = HEIGHT/2;
-    this->gameOver = false;
+    gameState = onMenu;
     for(int i = 0; i < 10; i++){
         apple[i] = Apple(randomPosition());
     }
 }
 
-void Game::openMenu(){
-    menu.open();
-    processInput();
+//LOGIC
+
+Position Game::randomPosition(){
+    Position p;
+    p.x = rand() % WIDTH;
+    p.y = rand() % HEIGHT;
+    return p;
 }
 
 void Game::processInput(){
@@ -56,10 +47,24 @@ void Game::processInput(){
 }
 
 
+//SCREENS
+
+void Game::openMenu(){
+    gameState = onMenu;
+    menu.open();
+    processInput();
+}
+
+
+void Game::openDeathScreen(){
+    gameState = onDeathScreen;
+    //todo (look at score, quit game...)
+    openMenu();
+}
+
+
 // void processLevel();
 
-
-// funziona solo se lo schiacci due volte
 void Game::exitGame(){
     flushinp();
     endwin();
@@ -69,17 +74,17 @@ void Game::exitGame(){
 
 void Game::startGame(){
 
+    gameState = onGame;
+
     board.init();
 
     board.addBorder();
-    
+
     board.refresh();
     initPrintSnake();
 
-
-
     char c;
-    while (!gameOver && c != 'q'){
+    while (gameState == onGame && c != 'q'){
         c = getch();
         switch (c) {
 
@@ -95,20 +100,22 @@ void Game::startGame(){
                 printApple(p); break;
             }
 
-             //DEBUG print string
-             case 'b': {
-                 char ciao[10];
-                 strcpy(ciao, "ciao");
-                 Position a = randomPosition();
-                 getBoard().addStringAt(a, ciao); break;
-             }
-             //open menu
-             case 'm': openMenu(); break;
+            //DEBUG print string
+            case 'b': {
+                char ciao[10];
+                strcpy(ciao, "ciao");
+                Position a = randomPosition();
+                getBoard().addStringAt(a, ciao); break;
+            }
+            //open menu
+            case 'm': {
+                gameState = onMenu; //forse non serve
+                openMenu(); break;
+            }
 
             default: break;
 
         }
-        board.clear();
         board.refresh();
     }
 
@@ -117,39 +124,30 @@ void Game::startGame(){
 
 }
 
+
+
+//GETTER METHODS
+
 Scriba Game::getScriba(){
     return scriba;
 }
-
 
 Menu Game::getMenu(){
     return this->menu;
 }
 
-
-
 Board Game::getBoard(){
     return this->board;
 }
 
-bool Game::isOver(){
-    return gameOver;
+GameState Game::getGameState(){
+    return gameState;
 }
 
-void Game::updateState(){
-    //updateSnake();
-    //TODO
-}
-
-Position Game::randomPosition(){
-    Position p;
-    p.x = rand() % WIDTH;
-    p.y = rand() % HEIGHT;
-    return p;
-}
 
 
 //APPLE METHODS
+
 void Game::printApple(Position p){
     if (board.isEmpty(p)) board.addCharAt(p, this->apple[0].getIcon()); //the apple index doesn't matter
 }
@@ -161,7 +159,9 @@ void Game::removeApple(Position p){
 }
 
 
+
 //SNAKE METHODS
+
 void Game::initPrintSnake(){ //only called at the start
     //add head
     board.addCharAt(center, this->snake.getHeadIcon());
@@ -173,30 +173,24 @@ void Game::initPrintSnake(){ //only called at the start
         delta.y = center.y+i;
         board.addCharAt(delta, this->snake.getBodyIcon());
     }
+
+    board.refresh();
 }
 
-void Game::updateSnake(Direction inputDirection){
-    
-    //store the head position before movement
+void Game::updateSnake(Direction inputDirection) {
+    ///store the head position before movement
     Position previousHead = snake.getHead();
 
-    Position oldTail = snake.move(inputDirection);
-
-    char buf[100];
-    sprintf(buf, "PrevHead:(%d,%d) OldTail:(%d,%d) Head:(%d,%d)\n",
-        previousHead.x, previousHead.y,
-        oldTail.x, oldTail.y,
-        snake.getHead().x, snake.getHead().y);
-    std::cerr << buf;
-
     //remove tail
-    board.rmCharAt(oldTail);
+    board.rmCharAt(snake.getTail());
+
+    if(!snake.move(inputDirection)) openDeathScreen();
+
+    board.refresh(); //to force another refresh
 
     //draw body icon where the head was
     board.addCharAt(previousHead, snake.getBodyIcon());
 
     //draw new head
     board.addCharAt(snake.getHead(), snake.getHeadIcon());
-
 }
-

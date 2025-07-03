@@ -1,4 +1,4 @@
-#pragma once
+//#pragma once  //da warning
 
 
 #include "Board.hpp"
@@ -21,7 +21,7 @@ Board::Board(){
 }
 
 void Board::init(){
-    cbreak();
+    //cbreak();
     noecho();
     keypad(stdscr, TRUE);
     clear();

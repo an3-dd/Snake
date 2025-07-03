@@ -40,7 +40,9 @@ class Snake{
 
     char getBodyIcon();
 
-    // allow the snake to move, it returns the old tail position
-    Position move(Direction inputDirection);
+    // allow the snake to move, it returns false if it collides with himself
+    bool move(Direction inputDirection);
+
+    bool snakeIsHere(Position p);
 
 };
