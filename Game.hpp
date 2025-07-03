@@ -23,12 +23,14 @@ class Game{
     Menu menu;
     Position center;
    
-    Apple apple[10]; //there are 10 apples on the screen, when one is eaten it respawns in another point
+    Apple apple[APPLE_COUNT]; //there are x apples on the screen, when one is eaten it respawns in another point
     Snake snake;
     Scriba scriba;
 
     //uso un enum al posto di un booleano per capire in che stato si trova il gioco
     GameState gameState; // bool gameOver;
+
+    int score;
 
     public:
 
@@ -54,14 +56,16 @@ class Game{
 
     GameState getGameState();
 
+    Position randomPosition();
+
 
     //Apple methods
-
-    Position randomPosition();
 
     void printApple(Position p);
 
     void removeApple(Position p);
+
+    void spawnApples();
     
 
     //Snake methods

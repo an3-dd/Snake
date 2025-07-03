@@ -14,11 +14,12 @@ using namespace std;
 
 Game::Game(){
     srand(time(0));
+    score = 0;
     center.x = WIDTH/2;
     center.y = HEIGHT/2;
     gameState = onMenu;
-    for(int i = 0; i < 10; i++){
-        apple[i] = Apple(randomPosition());
+    for(int i = 0; i < APPLE_COUNT; i++){
+        apple[i] = Apple();
     }
 }
 
@@ -78,10 +79,9 @@ void Game::startGame(){
 
     board.init();
 
-    board.addBorder();
-
-    board.refresh();
     initPrintSnake();
+
+    spawnApples();
 
     char c;
     while (gameState == onGame && c != 'q'){
@@ -109,7 +109,6 @@ void Game::startGame(){
             }
             //open menu
             case 'm': {
-                gameState = onMenu; //forse non serve
                 openMenu(); break;
             }
 
@@ -158,6 +157,17 @@ void Game::removeApple(Position p){
     }
 }
 
+void Game::spawnApples(){
+    for(int i=0; i<APPLE_COUNT; i++){
+        Position r = randomPosition();
+        while (!board.isEmpty(r)) {
+            r = randomPosition();
+        }
+        apple[i] = Apple(r);
+        printApple(r);
+    }
+}
+
 
 
 //SNAKE METHODS
@@ -178,6 +188,45 @@ void Game::initPrintSnake(){ //only called at the start
 }
 
 void Game::updateSnake(Direction inputDirection) {
+    Position previousHead = snake.getHead();
+    board.rmCharAt(snake.getTail());
+
+    if (!snake.move(inputDirection)) {
+        openDeathScreen();
+        return;
+    }
+
+    Position newHead = snake.getHead();
+
+    //Apple check BEFORE placing snake head
+    for (int i = 0; i < 10; i++) {
+        if (apple[i].getPosition() == newHead) {
+            score++;
+            // remove old apple
+            removeApple(apple[i].getPosition());
+
+            // generate a new one
+            Position newPos;
+            do {
+                newPos = randomPosition();
+            } while (!board.isEmpty(newPos)); // avoid spawning on the snake
+
+            apple[i] = Apple(newPos);
+            printApple(newPos);
+            break;
+        }
+    }
+
+    //Draw body and head
+    board.addCharAt(previousHead, snake.getBodyIcon());
+    board.addCharAt(snake.getHead(), snake.getHeadIcon());
+
+    board.refresh();
+}
+
+
+/*
+void Game::updateSnake(Direction inputDirection) {
     ///store the head position before movement
     Position previousHead = snake.getHead();
 
@@ -193,4 +242,26 @@ void Game::updateSnake(Direction inputDirection) {
 
     //draw new head
     board.addCharAt(snake.getHead(), snake.getHeadIcon());
-}
+
+    if (board.getCharAt(snake.getHead()) == apple[0].getIcon()) {
+
+        score++;
+
+        //find which apple was eaten
+        for (int i = 0; i < APPLE_COUNT; i++) {
+                            cout << "niggers";
+            if (apple[i].getPosition() == snake.getHead()) {
+                cout << "niggers";
+                removeApple(snake.getHead());
+
+                Position p = randomPosition();
+                while (!board.isEmpty(p)) {
+                    p = randomPosition();
+                }
+
+                apple[i] = Apple(p);
+                printApple(p);
+                break;
+            }
+        }
+}*/

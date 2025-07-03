@@ -1,6 +1,5 @@
 //#pragma once  //da warning
 
-
 #include "Board.hpp"
 #include "Const.hpp"
 #include <ncurses.h>
@@ -21,7 +20,7 @@ Board::Board(){
 }
 
 void Board::init(){
-    //cbreak();
+    cbreak();
     noecho();
     keypad(stdscr, TRUE);
     clear();

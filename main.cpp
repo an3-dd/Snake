@@ -1,5 +1,4 @@
 #include <ncurses.h>
-// #include "Position.hpp"
 #include "Game.hpp"
 // #include <cstring>
 
