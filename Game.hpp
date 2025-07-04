@@ -27,10 +27,10 @@ class Game{
     Snake snake;
     Scriba scriba;
 
-    //uso un enum al posto di un booleano per capire in che stato si trova il gioco
     GameState gameState; // bool gameOver;
 
     int score;
+    int bonus; //bonus is the score multiplier based on level
 
     public:
 
@@ -57,7 +57,6 @@ class Game{
     GameState getGameState();
 
     Position randomPosition();
-
 
     //Apple methods
 

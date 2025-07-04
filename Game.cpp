@@ -6,12 +6,6 @@
 #include <cstring>
 using namespace std;
 
-// inutile perche il costruttor inzializza
-// automaticamente tutti gli oggetti al suo interno
-// Game::Game(): board(), menu(){
-// questo serve solo quando vogliamo usare un cstruttore
-// diverso da quello di default
-
 Game::Game(){
     srand(time(0));
     score = 0;
@@ -21,7 +15,11 @@ Game::Game(){
     for(int i = 0; i < APPLE_COUNT; i++){
         apple[i] = Apple();
     }
+
+    score = 0;
+    bonus = 1;
 }
+
 
 //LOGIC
 
@@ -82,6 +80,12 @@ void Game::startGame(){
     initPrintSnake();
 
     spawnApples();
+
+    score = 0;
+
+    int levelIndex = menu.getLevel();
+    
+    //TODO need to get currentLevel with the index
 
     char c;
     while (gameState == onGame && c != 'q'){
@@ -191,6 +195,7 @@ void Game::updateSnake(Direction inputDirection) {
     Position previousHead = snake.getHead();
     board.rmCharAt(snake.getTail());
 
+    //check if movement is valid
     if (!snake.move(inputDirection)) {
         openDeathScreen();
         return;
@@ -201,7 +206,10 @@ void Game::updateSnake(Direction inputDirection) {
     //Apple check BEFORE placing snake head
     for (int i = 0; i < 10; i++) {
         if (apple[i].getPosition() == newHead) {
-            score++;
+            
+            //score management
+            score += bonus;
+
             // remove old apple
             removeApple(apple[i].getPosition());
 
@@ -223,45 +231,3 @@ void Game::updateSnake(Direction inputDirection) {
 
     board.refresh();
 }
-
-
-/*
-void Game::updateSnake(Direction inputDirection) {
-    ///store the head position before movement
-    Position previousHead = snake.getHead();
-
-    //remove tail
-    board.rmCharAt(snake.getTail());
-
-    if(!snake.move(inputDirection)) openDeathScreen();
-
-    board.refresh(); //to force another refresh
-
-    //draw body icon where the head was
-    board.addCharAt(previousHead, snake.getBodyIcon());
-
-    //draw new head
-    board.addCharAt(snake.getHead(), snake.getHeadIcon());
-
-    if (board.getCharAt(snake.getHead()) == apple[0].getIcon()) {
-
-        score++;
-
-        //find which apple was eaten
-        for (int i = 0; i < APPLE_COUNT; i++) {
-                            cout << "niggers";
-            if (apple[i].getPosition() == snake.getHead()) {
-                cout << "niggers";
-                removeApple(snake.getHead());
-
-                Position p = randomPosition();
-                while (!board.isEmpty(p)) {
-                    p = randomPosition();
-                }
-
-                apple[i] = Apple(p);
-                printApple(p);
-                break;
-            }
-        }
-}*/
