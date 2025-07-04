@@ -19,6 +19,10 @@ class Game{
 
     protected:
 
+    // variabili che servono a gestire il gioco
+    int velocita = 0;
+
+
     Board board;
     Menu menu;
     Position center;
@@ -30,7 +34,9 @@ class Game{
     GameState gameState; // bool gameOver;
 
     int score;
-    int bonus; //bonus is the score multiplier based on level
+
+    // inutile perche lo trovi in getMenu().getCurrentLevel().bonus;
+    // int bonus; //bonus is the score multiplier based on level
 
     public:
 

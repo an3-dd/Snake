@@ -1,7 +1,6 @@
 #include "Game.hpp"
 #include "Menu.hpp"
 #include "Position.hpp"
-#include <iostream>
 #include <ncurses.h>
 #include <cstring>
 using namespace std;
@@ -17,7 +16,10 @@ Game::Game(){
     }
 
     score = 0;
-    bonus = 1;
+
+    // si trova gia in getMenu().getCurrentLevel().bonus
+    // ho modificato la funzione in cui questo attributo veniva richiamato
+    // bonus = 1;
 }
 
 
@@ -50,6 +52,7 @@ void Game::processInput(){
 
 void Game::openMenu(){
     gameState = onMenu;
+    menu.setCurrentLevel(0);
     menu.open();
     processInput();
 }
@@ -62,12 +65,10 @@ void Game::openDeathScreen(){
 }
 
 
-// void processLevel();
 
 void Game::exitGame(){
-    flushinp();
     endwin();
-    exit(0);
+    exit(0);    // commenta se vuoi stampare sul terminale qualche variabile per verificarne il corretto assegnamento
 }
 
 
@@ -208,7 +209,7 @@ void Game::updateSnake(Direction inputDirection) {
         if (apple[i].getPosition() == newHead) {
             
             //score management
-            score += bonus;
+            score += getMenu().getCurrentLevel().bonus;
 
             // remove old apple
             removeApple(apple[i].getPosition());

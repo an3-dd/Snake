@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstring>
 #include "Board.hpp"
+#include "Const.hpp"
 
 
 
@@ -30,7 +31,8 @@ protected:
 
     // l'array scores tiene un massimo di punteggi che la classifica puo immagazzinare
     // la variabile coutn, ci dice quanti ce ne sono memorizzati al momento
-    ScoreEntry scores[MAX_SCORES];
+    // ScoreEntry scores[MAX_SCORES];
+
     int count = 0;
 
 
@@ -56,6 +58,11 @@ public:
     // funzione che salva le score all'interno del file classifica.txt
     // mediante l'uso di ofstream
     void saveScore(int points, const char* level);
+
+    void insertRec(char righe[][RAW_LEN], int pos, int pts, const char level[]);
+    void insert(int pts, const char level[]);
+
+
 
 
 

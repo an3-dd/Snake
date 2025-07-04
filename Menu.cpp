@@ -4,21 +4,18 @@
 #include "Const.hpp"
 #include "Position.hpp"
 #include <cstring>
-#include <menu.h>
 #include <iostream>
+#include <menu.h>
 #include <ncurses.h>
 
 using namespace std;
 
-Menu::Menu(){
+Menu::Menu() {
 
   initBoard();
   initLevels();
   showOptions();
-  // cleanPodium();
-
 }
-
 
 // aggiunge i livelli alla lista bidirezionale
 bool Menu::addLevel(int d, char name[]) {
@@ -37,14 +34,13 @@ bool Menu::addLevel(int d, char name[]) {
 
   if (head == nullptr) {
     head = n;
-    return true;
-  }
-  else {
+    done = true;
+  } else {
 
     while (!done) {
       if (p->diff == n->diff) {
         delete n;
-        return false;
+        done = false;
       } else {
         if (n->diff < p->diff) {
           if (p->prev == nullptr) {
@@ -74,10 +70,7 @@ bool Menu::addLevel(int d, char name[]) {
   return done;
 }
 
-
-int Menu::getLevel(){
-  return level;
-}
+int Menu::getLevel() { return level; }
 
 void Menu::printLevels() {
 
@@ -94,139 +87,141 @@ void Menu::printLevels() {
   }
 }
 
-void Menu::initLevels(){
+void Menu::initLevels() {
 
   char facile[] = "facile";
   char medio[] = "medio";
   char difficile[] = "difficile";
 
-  addLevel(1, facile);
-  addLevel(2, medio);
-  addLevel(3, difficile);
+  addLevel(0, facile);
+  addLevel(1, medio);
+  addLevel(2, difficile);
 }
 
 // Board::init()
-void Menu::initBoard(){
-  menuBoard.init();
-}
+void Menu::initBoard() { menuBoard.init(); }
 
-void Menu::showOptions(){
+void Menu::showOptions() {
 
   char gioca[] = "GIOCA";
   char classifica[] = "VEDI CLASSIFICA";
   char seleziona[] = "SELEZIONA LIVELLO";
   char esci[] = "ESCI";
 
-
-  char* voices[] = {gioca, classifica, seleziona, esci};
+  char *voices[] = {gioca, classifica, seleziona, esci};
   int numVoices = 4;
   int selected = 0;
-  int input;
-
+  int input = 0;
 
   Position center;
   Position pos;
-  center.x = WIDTH/2;
-  center.y = HEIGHT/2; 
+  center.x = WIDTH / 2;
+  center.y = HEIGHT / 2;
   keypad(menuBoard.getWin(), TRUE);
   curs_set(0);
-  while (true){ //DA TOGLIERE PRE
+  while (true) { // DA TOGLIERE PRE
     menuBoard.clear();
-    for (int i = 0; i < numVoices; i++){
+    for (int i = 0; i < numVoices; i++) {
       pos.x = center.x;
       pos.y = (HEIGHT - numVoices) / 2 + i;
-      if (i == selected){
+      if (i == selected) {
         wattron(menuBoard.getWin(), A_REVERSE);
         menuBoard.addStringAt(pos, voices[i]);
         wattroff(menuBoard.getWin(), A_REVERSE);
-      }
-      else menuBoard.addStringAt(pos, voices[i]);
+      } else
+        menuBoard.addStringAt(pos, voices[i]);
     }
     menuBoard.refresh();
     input = menuBoard.getInput();
-    switch (input){
-      case KEY_UP:
-        selected = (selected - 1 + numVoices) % numVoices;
-        break;
-      case KEY_DOWN:
-        selected = (selected + 1) % numVoices;
-        break;
-      case '\n':
-        this->choice = selected;
-        mvprintw(0, 0, "Scelta fatta: %d  ", choice);
-        return;
+    switch (input) {
+    case KEY_UP:
+      selected = (selected - 1 + numVoices) % numVoices;
+      break;
+    case KEY_DOWN:
+      selected = (selected + 1) % numVoices;
+      break;
+    case '\n':
+      this->choice = selected;
+      return;
+    default:
+      break;
     }
   }
 }
 
-// void Menu::haiPremuto(){
-//   chtype a;
-//   a = menuBoard.getInput();
-//   cout << "hai premuto: " << a << endl;
-// }
-
-void Menu::open(){
+void Menu::open() {
   menuBoard.clear();
   menuBoard.refresh();
   showOptions();
 }
 
-void Menu::showLevels(){
+void Menu::showLevels() {
   char facile[] = "FACILE";
   char medio[] = "MEDIO";
   char difficile[] = "DIFFICILE";
   char indietro[] = "INDIETRO";
 
-  char* voices[] = {facile, medio, difficile, indietro};
+  char *voices[] = {facile, medio, difficile, indietro};
   int numVoices = 4;
   int selected = 0;
   int input;
 
   Position center;
   Position pos;
-  center.x = WIDTH/2;
-  center.y = HEIGHT/2; 
+  center.x = WIDTH / 2;
+  center.y = HEIGHT / 2;
   keypad(menuBoard.getWin(), TRUE);
   curs_set(0);
-  while (true){
+  while (true) {
     menuBoard.clear();
-    for (int i = 0; i < numVoices; i++){
+    for (int i = 0; i < numVoices; i++) {
       pos.x = center.x;
       pos.y = (HEIGHT - numVoices) / 2 + i;
-      if (i == selected){
+      if (i == selected) {
         wattron(menuBoard.getWin(), A_REVERSE);
         menuBoard.addStringAt(pos, voices[i]);
         wattroff(menuBoard.getWin(), A_REVERSE);
-      }
-      else menuBoard.addStringAt(pos, voices[i]);
+      } else
+        menuBoard.addStringAt(pos, voices[i]);
     }
     menuBoard.refresh();
     input = menuBoard.getInput();
-    switch (input){
-      case KEY_UP:
-        selected = (selected - 1 + numVoices) % numVoices;
-        break;
-      case KEY_DOWN:
-        selected = (selected + 1) % numVoices;
-        break;
-      case '\n':
-        this->level = selected;
-        return;
-      default: break;
+    switch (input) {
+    case KEY_UP:
+      selected = (selected - 1 + numVoices) % numVoices;
+      break;
+    case KEY_DOWN:
+      selected = (selected + 1) % numVoices;
+      break;
+    case '\n':
+      setCurrentLevel(selected);
+      return;
+    default:
+      break;
     }
   }
-
 }
 
-int Menu::getChoice(){
-  return this->choice;
+void Menu::setCurrentLevel(int d) {
+
+  Levels *p = head;
+
+  while (p != nullptr) {
+
+    if (p->diff == d) {
+      currentLevel.diff = p->diff;
+      currentLevel.bonus = p->bonus;
+      strcpy(currentLevel.name, p->name);
+      currentLevel.next = nullptr;
+      currentLevel.prev = nullptr;
+      currentLevel.timeSec = p->timeSec;
+    }
+    p = p->next;
+  }
 }
 
-void Menu::resetChoice(){
-  this->choice = -1;
-}
+Levels Menu::getCurrentLevel() { return currentLevel; }
 
+int Menu::getChoice() { return this->choice; }
 
-
-
-
+void Menu::resetChoice() { this->choice = -1; }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Board.hpp"
-// #include "Scriba.hpp"
 
 
 
@@ -29,7 +28,7 @@ class Menu{
     Board menuBoard;
 
     Levels *head = nullptr;
-    // Levels *currentLevel;
+    Levels currentLevel;
     int choice = -1;
     int level = -1;
     bool isOpen;
@@ -43,8 +42,6 @@ class Menu{
     public:
 
     Menu();
-
-    void haiPremuto();
 
     // print options in the menu board (play, view stats ...)
     // questa funzione al termine della sua esecuzione setta il parametro
@@ -81,7 +78,13 @@ class Menu{
 
     void viewPodium();
 
-    // clan classifica.txt
+    // cerca il livello con la difficolta = diff
+    // copia in currentLevel il livello trovato
+    void setCurrentLevel(int diff);
+
+    Levels getCurrentLevel();
+
+    // clean classifica.txt
     // void cleanPodium();
 
     void addScore(char name[]);

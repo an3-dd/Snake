@@ -12,11 +12,10 @@ int main(int argc, char ** argv){
 
     Game game;
 
-    // game.getScriba().saveScore(190, "impossibile");
-
     game.openMenu();
 
-    // exit(0);
+    cout << game.getMenu().getCurrentLevel().name;
+
 
 
     return 0;
