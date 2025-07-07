@@ -49,7 +49,7 @@ void Game::openMenu(){
     gameState = onMenu;
     menu.setCurrentLevel(0);
     menu.open();
-    processInput(); // Revert to calling processInput() here
+    processInput();
     
 }
 
@@ -64,7 +64,6 @@ void Game::openDeathScreen(){
 
 void Game::exitGame(){
     endwin();
-    system("clear"); // Clear the terminal after exiting ncurses
     exit(0);
 }
 
@@ -73,7 +72,7 @@ void Game::startGame(){
     gameState = onGame;
 
     board.init();
-    board.clear(); // Ensure border is drawn before anything else
+    //board.clear(); // Ensure border is drawn before anything else
     snake.reset(); // Reset snake state
 
     initPrintSnake();
