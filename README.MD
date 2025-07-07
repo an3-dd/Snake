@@ -1,6 +1,6 @@
 TODO
     - quando una partita termina, i punti non vengono salvati all'interno del file 
-    - fixare stampa timer
+    - fixare stampa punteggio (non si toglie)
     - per fare una scelta sul menu bisogna cliccare due volte
     - per giocare bisogna prima uscire e rientrare
     - aggiungere la pausa e il menu di pausa

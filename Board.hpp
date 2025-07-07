@@ -9,6 +9,9 @@ class Board{
 
     WINDOW *win;
 
+    int win_x; // x coordinate of the window
+    int win_y; // y coordinate of the window
+    
     public:
 
     Board();

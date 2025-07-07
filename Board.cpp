@@ -10,11 +10,12 @@ Board::Board(){
 
     int maxY, maxX;
     getmaxyx(stdscr, maxY, maxX);
-
+    win_y = (maxY / 2) - (HEIGHT / 2);
+    win_x = (maxX / 2) - (WIDTH / 2);
 
 
     // create a window in the center of the terminal
-    this->win = newwin(HEIGHT, WIDTH, (maxY / 2) - (HEIGHT / 2), (maxX / 2) - (WIDTH / 2));
+    this->win = newwin(HEIGHT, WIDTH, win_y, win_x);
 
     init();
 }
@@ -79,19 +80,16 @@ bool Board::isEmpty(Position p){
 }
 
 void Board::printScore(int score) {
-    // Print score above the top border, centered
-    int x = WIDTH / 2 - 7; // Adjust for "Score: " and digits
-    int y = 0; // One line above the border
+    int x = win_x + WIDTH / 2 - 7; // Centered above the window
+    int y = win_y - 1; // One line above the window
     mvprintw(y, x, "Score: %d", score);
     refresh();
 }
 
 void Board::clearScore() {
-    
-    // clear the line where the score is printed
-    move(0, 0);
-    clrtoeol();
-
+    int x = win_x + WIDTH / 2 - 7;
+    int y = win_y - 1;
+    mvprintw(y, x, "                  ");//l'implementazione non funziona, ma non so perche
     refresh();
 }
 

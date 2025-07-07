@@ -45,8 +45,8 @@ void Game::processInput(){
 //SCREENS
 
 void Game::openMenu(){
-    board.clearScore(); // Hide the score when entering the menu
     gameState = onMenu;
+    board.clearScore(); //NON FUNZIONA
     menu.setCurrentLevel(0);
     menu.open();
     processInput();
@@ -56,8 +56,8 @@ void Game::openMenu(){
 
 void Game::openDeathScreen(){
     gameState = onDeathScreen;
-    //todo (look at score, quit game...)
-    openMenu();
+    //TODO bisogna stampare il punteggio e dare la possibilità di tornare al menu
+    openMenu(); //va tolto e messo come opzione
 }
 
 
@@ -82,10 +82,9 @@ void Game::startGame(){
     score = 0;
     board.printScore(score); // Show initial score
 
-    int levelIndex = menu.getLevel();
     int baseDelay = 200; // ms
     int speedMult = 1;
-    switch (levelIndex) {
+    switch (menu.getLevel()) {
         case 0: speedMult = 1; break; // easy
         case 1: speedMult = 3; break; // medium
         case 2: speedMult = 5; break; // hard
@@ -215,7 +214,12 @@ void Game::updateSnake(Direction inputDirection) {
         if (apple[i].getPosition() == newHead) {
             
             //score management
-            score += getMenu().getCurrentLevel().bonus;
+            switch (menu.getLevel()) {
+                case 0: score += 1; break; // easy
+                case 1: score += 3; break; // medium
+                case 2: score += 5; break; // hard
+                default: score = 1; break;
+            }
             ateApple = true;
 
             // remove old apple
