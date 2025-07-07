@@ -1,6 +1,13 @@
 TODO
-    - quando perdi una partita, non puoi piu giocare finche non riavvii il gioco
-    - all'interno della partita, quando il serpente tocca un bordo esso si cancella
     - quando una partita termina, i punti non vengono salvati all'interno del file 
-    - il serpente non continua a muoversi automaticamente
-    - stabilire il modo in cui vengono gestiti il tempo il bonus e la velocita del serpente (possimilmente usando getmenu().getcurrentlevel.attributi)
+    - fixare stampa timer
+    - per fare una scelta sul menu bisogna cliccare due volte
+    - per giocare bisogna prima uscire e rientrare
+    - aggiungere la pausa e il menu di pausa
+    - aggiungere il menu di morte ("hai fatto x punti" + opzione per tornare al menu)
+
+DONE
+- il serpente ora si muove in automatico
+- il bordo non si cancella piu
+- il serpente si resetta quando inizi un'altra partita
+- ora quando perdi puoi iniziare una nuova partita

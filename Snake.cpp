@@ -77,11 +77,24 @@ bool Snake::move(Direction inputDirection) {
 
     //calculate new head position
     Position newHead = headPosition;
-    switch (currentDirection) { //the module is to account for "pacman effect"
-        case UP: newHead.y = (newHead.y - 1 + HEIGHT) % HEIGHT; break;
-        case DOWN: newHead.y = (newHead.y + 1) % HEIGHT; break;
-        case LEFT: newHead.x = (newHead.x - 1 + WIDTH) % WIDTH; break;
-        case RIGHT: newHead.x = (newHead.x + 1) % WIDTH; break;
+    // Loop one step before the border (so snake never enters the border)
+    switch (currentDirection) {
+        case UP:
+            if (newHead.y == 1) newHead.y = HEIGHT - 2;
+            else newHead.y = newHead.y - 1;
+            break;
+        case DOWN:
+            if (newHead.y == HEIGHT - 2) newHead.y = 1;
+            else newHead.y = newHead.y + 1;
+            break;
+        case LEFT:
+            if (newHead.x == 1) newHead.x = WIDTH - 2;
+            else newHead.x = newHead.x - 1;
+            break;
+        case RIGHT:
+            if (newHead.x == WIDTH - 2) newHead.x = 1;
+            else newHead.x = newHead.x + 1;
+            break;
         default: break;
     }
 
@@ -95,10 +108,22 @@ bool Snake::move(Direction inputDirection) {
     // Clear old tail position and update tailPosition accordingly
     body[tailPosition.x][tailPosition.y] = false;
     switch (tailDirection) {
-        case UP:    tailPosition.y = (tailPosition.y - 1 + HEIGHT) % HEIGHT; break;
-        case DOWN:  tailPosition.y = (tailPosition.y + 1) % HEIGHT; break;
-        case LEFT:  tailPosition.x = (tailPosition.x - 1 + WIDTH) % WIDTH; break;
-        case RIGHT: tailPosition.x = (tailPosition.x + 1) % WIDTH; break;
+        case UP:
+            if (tailPosition.y == 1) tailPosition.y = HEIGHT - 2;
+            else tailPosition.y = tailPosition.y - 1;
+            break;
+        case DOWN:
+            if (tailPosition.y == HEIGHT - 2) tailPosition.y = 1;
+            else tailPosition.y = tailPosition.y + 1;
+            break;
+        case LEFT:
+            if (tailPosition.x == 1) tailPosition.x = WIDTH - 2;
+            else tailPosition.x = tailPosition.x - 1;
+            break;
+        case RIGHT:
+            if (tailPosition.x == WIDTH - 2) tailPosition.x = 1;
+            else tailPosition.x = tailPosition.x + 1;
+            break;
         default: break;
     }
 
@@ -108,6 +133,26 @@ bool Snake::move(Direction inputDirection) {
     //movement was succesful
     return true;
 
+}
+
+void Snake::reset() { //it's the same as the constructor, but it resets the snake
+    for (int x = 0; x < WIDTH; x++) {
+        for (int y = 0; y < HEIGHT; y++) {
+            body[x][y] = false;
+        }
+    }
+    int centerX = WIDTH / 2;
+    int centerY = HEIGHT / 2;
+    for (int i = 0; i < SNAKE_LENGTH; i++) {
+        body[centerX][centerY + i] = true;
+    }
+    headPosition = Position(centerX, centerY);
+    tailPosition = Position(centerX, centerY - 1 + SNAKE_LENGTH);
+    currentDirection = NONE;
+    indexCircular = 0;
+    for (int i = 0; i < SNAKE_LENGTH; i++) {
+        dirHistory[i] = UP;
+    }
 }
 
 

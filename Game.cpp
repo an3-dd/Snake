@@ -16,10 +16,7 @@ Game::Game(){
     }
 
     score = 0;
-
-    // si trova gia in getMenu().getCurrentLevel().bonus
-    // ho modificato la funzione in cui questo attributo veniva richiamato
-    // bonus = 1;
+    currentDirection = UP; // Default starting direction
 }
 
 
@@ -33,28 +30,27 @@ Position Game::randomPosition(){
 }
 
 void Game::processInput(){
-
-    int scelta = menu.getChoice();
-
-    switch (scelta) {
-
-        case 0: startGame(); break;
-        case 1: scriba.showScores(); openMenu(); break;
-        case 2: menu.showLevels(); openMenu(); break;
-        case 3: exitGame(); break;
-        default : break;
-    }
-    menu.resetChoice();
+        int scelta = menu.getChoice();
+        switch (scelta) {
+            case 0: startGame(); break;
+            case 1: scriba.showScores(); openMenu(); break;
+            case 2: menu.showLevels(); openMenu(); break;
+            case 3: exitGame(); break;
+            default: break;
+        }
+        menu.resetChoice();
 }
 
 
 //SCREENS
 
 void Game::openMenu(){
+    board.clearScore(); // Hide the score when entering the menu
     gameState = onMenu;
     menu.setCurrentLevel(0);
     menu.open();
-    processInput();
+    processInput(); // Revert to calling processInput() here
+    
 }
 
 
@@ -68,43 +64,51 @@ void Game::openDeathScreen(){
 
 void Game::exitGame(){
     endwin();
-    exit(0);    // commenta se vuoi stampare sul terminale qualche variabile per verificarne il corretto assegnamento
+    system("clear"); // Clear the terminal after exiting ncurses
+    exit(0);
 }
-
 
 void Game::startGame(){
 
     gameState = onGame;
 
     board.init();
+    board.clear(); // Ensure border is drawn before anything else
+    snake.reset(); // Reset snake state
 
     initPrintSnake();
 
     spawnApples();
 
     score = 0;
+    board.printScore(score); // Show initial score
 
     int levelIndex = menu.getLevel();
+    int baseDelay = 200; // ms
+    int speedMult = 1;
+    switch (levelIndex) {
+        case 0: speedMult = 1; break; // easy
+        case 1: speedMult = 3; break; // medium
+        case 2: speedMult = 5; break; // hard
+        default: speedMult = 1; break;
+    }
     
-    //TODO need to get currentLevel with the index
+    nodelay(stdscr, TRUE); // Make getch() non-blocking
 
-    char c;
+    char c = 0;
     while (gameState == onGame && c != 'q'){
         c = getch();
         switch (c) {
-
             //movement
-            case 'w': updateSnake(UP); break;
-            case 's': updateSnake(DOWN); break;
-            case 'a': updateSnake(LEFT); break;
-            case 'd': updateSnake(RIGHT); break;
-            
+            case 'w': currentDirection = UP; break;
+            case 's': currentDirection = DOWN; break;
+            case 'a': currentDirection = LEFT; break;
+            case 'd': currentDirection = RIGHT; break;
             //DEBUG print apple in random position
             case 'k': {
                 Position p = randomPosition();
                 printApple(p); break;
             }
-
             //DEBUG print string
             case 'b': {
                 char ciao[10];
@@ -120,7 +124,9 @@ void Game::startGame(){
             default: break;
 
         }
+        updateSnake(currentDirection); //automatic movement
         board.refresh();
+        napms(baseDelay / speedMult);
     }
 
     endwin();
@@ -205,11 +211,13 @@ void Game::updateSnake(Direction inputDirection) {
     Position newHead = snake.getHead();
 
     //Apple check BEFORE placing snake head
+    bool ateApple = false;
     for (int i = 0; i < 10; i++) {
         if (apple[i].getPosition() == newHead) {
             
             //score management
             score += getMenu().getCurrentLevel().bonus;
+            ateApple = true;
 
             // remove old apple
             removeApple(apple[i].getPosition());
@@ -226,9 +234,12 @@ void Game::updateSnake(Direction inputDirection) {
         }
     }
 
-    //Draw body and head
+    //draw body and head
     board.addCharAt(previousHead, snake.getBodyIcon());
     board.addCharAt(snake.getHead(), snake.getHeadIcon());
 
+    //if an apple was eaten, print the score
+    if (ateApple) board.printScore(score); 
+    
     board.refresh();
 }

@@ -26,7 +26,7 @@ bool Menu::addLevel(int d, char name[]) {
   n->diff = d;
   strcpy(n->name, name);
   n->timeSec *= 10 * n->diff;
-  n->bonus *= 5 * n->diff;
+  n->bonus = 5 * (n->diff + 1);
   n->prev = nullptr;
   n->next = nullptr;
 
@@ -195,6 +195,7 @@ void Menu::showLevels() {
       break;
     case '\n':
       setCurrentLevel(selected);
+      level = selected;
       return;
     default:
       break;

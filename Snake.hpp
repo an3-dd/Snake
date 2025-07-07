@@ -45,4 +45,6 @@ class Snake{
 
     bool snakeIsHere(Position p);
 
+    void reset();
+
 };

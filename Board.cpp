@@ -78,4 +78,21 @@ bool Board::isEmpty(Position p){
     return mvwinch(win, p.y, p.x) == ' ';
 }
 
+void Board::printScore(int score) {
+    // Print score above the top border, centered
+    int x = WIDTH / 2 - 7; // Adjust for "Score: " and digits
+    int y = 0; // One line above the border
+    mvprintw(y, x, "Score: %d", score);
+    refresh();
+}
+
+void Board::clearScore() {
+    
+    // clear the line where the score is printed
+    move(0, 0);
+    clrtoeol();
+
+    refresh();
+}
+
 

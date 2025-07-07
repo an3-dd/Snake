@@ -19,10 +19,6 @@ class Game{
 
     protected:
 
-    // variabili che servono a gestire il gioco
-    int velocita = 0;
-
-
     Board board;
     Menu menu;
     Position center;
@@ -31,12 +27,14 @@ class Game{
     Snake snake;
     Scriba scriba;
 
-    GameState gameState; // bool gameOver;
+    GameState gameState;
 
     int score;
 
     // inutile perche lo trovi in getMenu().getCurrentLevel().bonus;
     // int bonus; //bonus is the score multiplier based on level
+
+    Direction currentDirection; // stores the current direction for auto-move
 
     public:
 

@@ -8,7 +8,7 @@
 struct Levels {
     char name[30];
     int diff = 0;
-    int bonus = 0; // bisogna assegnare unvalore di default
+    int bonus = 0; //default value
     int timeSec = 60;
     Levels *next;
     Levels *prev;
