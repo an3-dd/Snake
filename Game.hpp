@@ -9,7 +9,6 @@
 #include "Scriba.hpp"
 
 //for the randomizer
-#include "cstdlib"
 #include "ctime"
 
 enum GameState {onGame, onMenu, onPause, onDeathScreen};

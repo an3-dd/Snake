@@ -3,8 +3,8 @@
 #include "Menu.hpp"
 #include "Position.hpp"
 #include <ncurses.h>
-#include <cstring>
 using namespace std;
+
 
 Game::Game(){
     srand(time(0));
@@ -18,6 +18,8 @@ Game::Game(){
 
     score = 0;
     currentDirection = UP; // Default starting direction
+
+    openMenu();
 }
 
 
@@ -32,12 +34,17 @@ Position Game::randomPosition(){
 
 void Game::processInput(){
     int scelta = menu.getChoice();
-    switch (scelta) {
-        case 0: startGame(); break;
-        case 1: scriba.showScores(); openMenu(); break;
-        case 2: menu.showLevels(); openMenu(); break;
-        case 3: exitGame(); break;
-        default: break;
+    if (scelta == 0) startGame();
+    else if (scelta == 1){
+        scriba.showScores();
+        openMenu();
+    }
+    else if (scelta == 2){
+        menu.showLevels();
+        openMenu();
+    }
+    else if (scelta == 3){
+        exitGame();
     }
     menu.resetChoice();
 }
@@ -46,11 +53,8 @@ void Game::processInput(){
 void Game::processInputDeath(){
 
     int scelta = menu.getChoice();
-    switch (scelta) {
-        case 0: openMenu(); break;
-        case 1: exitGame(); break;
-        default: break;
-    }
+    if (scelta == 0) openMenu();
+    else if (scelta == 1) exitGame();
     menu.resetChoice();
 }
 
@@ -62,26 +66,12 @@ void Game::printScore() {
     char buffer[10];
     sprintf(buffer, "%d", score);
 
-    board.addStringAt(0, 0, "Score: ");
-    board.addStringAt(6, 0, buffer);
+    char score[] = {"Score: "};
+    board.addStringAt(0, 0, score);
+    board.addStringAt(7, 0, buffer);
     refresh();
 }
 
-// non cred che serva realmente
-void Game::clearScore() {
-    int maxY, maxX;
-    getmaxyx(stdscr, maxY, maxX);
-    int win_y = (maxY / 2) - (HEIGHT / 2);
-    int win_x = (maxX / 2) - (WIDTH / 2);
-
-    int x = win_x + WIDTH / 2 - 7;
-    int y = win_y - 1;
-
-    // su quale finestra agisce questa funzione?
-    // mvaddnstr(y, x, str, n)
-    mvprintw(y, x, "                  ");//l'implementazione non funziona, ma non so perche
-    refresh();
-}
 
 void Game::printTimer() {
     int elapsedPause = 0;
@@ -96,8 +86,10 @@ void Game::printTimer() {
     int sec = secondsLeft % 60;
     char buffer[16];
     sprintf(buffer, "%02d:%02d", min, sec);
-    board.addStringAt(20, 0, "Timer: ");
-    board.addStringAt(27, 0, buffer);
+
+    char timer[] = {"Timer: "};
+    board.addStringAt(WIDTH - 12, 0, timer);
+    board.addStringAt(WIDTH - 5, 0, buffer);
     refresh();
 }
 
@@ -141,45 +133,49 @@ void Game::startGame(){
     pauseTime = 0;
     printTimer();
     refresh();
+
+    char tornamenu[] = {"PRESS M TO MENU"};
+    board.addStringAt(center.x - 7, HEIGHT-1, tornamenu);
+    refresh();
+
+
     int baseDelay = 200;
     int speedMult = 1;
-    switch (menu.getLevel()) {
-        case 0: speedMult = 1; break;
-        case 1: speedMult = 3; break;
-        case 2: speedMult = 5; break;
-        default: speedMult = 1; break;
-    }
+    int scelta = menu.getLevel();
+
+    if (scelta == 0) speedMult = 1;
+    else if (scelta == 1) speedMult = 3;
+    else if (scelta == 2) speedMult = 5;
+
     nodelay(stdscr, TRUE);
-    char c = 0;
-    while (gameState == onGame && c != 'q'){
+    keypad(stdscr, TRUE);
+    int c = 0;
+
+    while (gameState == onGame){
         c = getch();
-        switch (c) {
-            case 'w': currentDirection = UP; break;
-            case 's': currentDirection = DOWN; break;
-            case 'a': currentDirection = LEFT; break;
-            case 'd': currentDirection = RIGHT; break;
-            case 'k': {
-                Position p = randomPosition();
-                printApple(p); break;
-            }
-            case 'b': {
-                char ciao[10];
-                strcpy(ciao, "ciao");
-                Position a = randomPosition();
-                getBoard().addStringAt(a, ciao); break;
-            }
-            case 'm': {
-                openMenu();
-                break;
-            }
-            default: break;
+        if (c == 'w' || c == 'W' || c == KEY_UP){
+            currentDirection = UP;
         }
+        else if (c == 's' || c == 'S' || c == KEY_DOWN){
+            currentDirection = DOWN;
+        }
+        else if (c == 'a' || c == 'A' || c == KEY_LEFT){
+            currentDirection = LEFT;
+        }
+        else if (c == 'd' || c == 'D' || c == KEY_RIGHT){
+            currentDirection = RIGHT;
+        }
+        else if (c == 'm' || c == 'M'){
+            openMenu();
+        }
+
         updateSnake(currentDirection);
         // TIMER UPDATE (freeze if paused)
         int elapsed;
         if (gameState == onMenu && pauseTime > 0) {
             elapsed = (int)(pauseTime - startTime);
-        } else {
+        } 
+        else {
             elapsed = (int)(time(nullptr) - startTime);
         }
         int secondsLeft = timeLimit - elapsed;
@@ -192,13 +188,7 @@ void Game::startGame(){
         refresh();
         napms(baseDelay / speedMult);
     }
-    int scelta = menu.getLevel();
-    switch (scelta) {
-        case 0: scriba.insert(score, "facile"); break;
-        case 1: scriba.insert(score, "medio"); break;
-        case 2: scriba.insert(score, "difficile"); break;
-        default: break;
-    }
+
     endwin();
     exit(0);
 }
@@ -208,12 +198,11 @@ void Game::startGame(){
 void Game::openDeathMenu(){
     gameState = onDeathScreen;
     int scelta = menu.getLevel();
-    switch (scelta) {
-        case 0: scriba.insert(score, "facile"); break;
-        case 1: scriba.insert(score, "medio"); break;
-        case 2: scriba.insert(score, "difficile"); break;
-        default: break;
-    }
+
+    if (scelta == 0) scriba.insert(score, "facile");
+    else if (scelta == 1) scriba.insert(score, "medio");
+    else if (scelta == 2) scriba.insert(score, "difficile");
+
     score = 0;
     menu.openDeath();
     mvwprintw(menu.getMenuBoard().getWin(), 0, 0, "HAI FATTO TOT PUNTI");
@@ -300,16 +289,19 @@ void Game::updateSnake(Direction inputDirection) {
 
     //Apple check BEFORE placing snake head
     bool ateApple = false;
-    for (int i = 0; i < 10; i++) {
+
+    int i = 0;
+    bool done = false;
+
+    while (i < 10 && !done){
         if (apple[i].getPosition() == newHead) {
             
             //score management
-            switch (menu.getLevel()) {
-                case 0: score += 1; break; // easy
-                case 1: score += 3; break; // medium
-                case 2: score += 5; break; // hard
-                default: score = 1; break;
-            }
+            int scelta = menu.getLevel();
+            if (scelta == 0) score += 1;
+            else if (scelta == 1) score += 3;
+            else if (scelta == 2) score += 5;
+
             ateApple = true;
 
             // remove old apple
@@ -323,8 +315,9 @@ void Game::updateSnake(Direction inputDirection) {
 
             apple[i] = Apple(newPos);
             printApple(newPos);
-            break;
+            done = true;
         }
+        i++;
     }
 
     //draw body and head
@@ -334,7 +327,6 @@ void Game::updateSnake(Direction inputDirection) {
     //if an apple was eaten, print the score
     if (ateApple) printScore(); 
     
-    // board.refresh();
     refresh();
 }
 

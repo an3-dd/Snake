@@ -11,7 +11,6 @@
 using namespace std;
 
 Menu::Menu() {
-  // initBoard();
   initLevels();
 }
 
@@ -117,7 +116,9 @@ void Menu::showOptions() {
   center.y = HEIGHT / 2;
   keypad(menuBoard.getWin(), TRUE);
   curs_set(0);
-  while (true) { // DA TOGLIERE PRE
+
+  bool done = false;
+  while (!done) {
     menuBoard.clear();
     for (int i = 0; i < numVoices; i++) {
       pos.x = center.x;
@@ -129,22 +130,16 @@ void Menu::showOptions() {
       } else
         menuBoard.addStringAt(pos, voices[i]);
     }
-    // menuBoard.refresh();
     refresh();
     input = menuBoard.getInput();
-    switch (input) {
-    case KEY_UP:
-      selected = (selected - 1 + numVoices) % numVoices;
-      break;
-    case KEY_DOWN:
-      selected = (selected + 1) % numVoices;
-      break;
-    case '\n':
+
+    if (input == KEY_UP) selected = (selected - 1 + numVoices) % numVoices;
+    else if (input == KEY_DOWN) selected = (selected + 1) % numVoices;
+    else if (input == '\n') {
       this->choice = selected;
-      return;
-    default:
-      break;
+      done = true;
     }
+
   }
 }
 
@@ -164,7 +159,9 @@ void Menu::showDeathOptions(){
   center.y = HEIGHT / 2;
   keypad(menuBoard.getWin(), TRUE);
   curs_set(0);
-  while (true) { // DA TOGLIERE PRE
+
+  bool done = false;
+  while (!done) {
     menuBoard.clear();
     for (int i = 0; i < numVoices; i++) {
       pos.x = center.x;
@@ -176,35 +173,27 @@ void Menu::showDeathOptions(){
       } else
         menuBoard.addStringAt(pos, voices[i]);
     }
-    // menuBoard.refresh();
+
     refresh();
     input = menuBoard.getInput();
-    switch (input) {
-    case KEY_UP:
-      selected = (selected - 1 + numVoices) % numVoices;
-      break;
-    case KEY_DOWN:
-      selected = (selected + 1) % numVoices;
-      break;
-    case '\n':
+    if (input == KEY_UP) selected = (selected - 1 + numVoices) % numVoices;
+    else if (input == KEY_DOWN) selected = (selected + 1) % numVoices;
+    else if (input == '\n'){
       this->choice = selected;
-      return;
-    default:
-      break;
+      done = true;
     }
+
   }
 }
 
 void Menu::open() {
   menuBoard.clear();
-  // menuBoard.refresh();
   refresh();
   showOptions();
 }
 
 void Menu::openDeath(){
   menuBoard.clear();
-  // menuBoard.refresh();
   refresh();
   showDeathOptions();
 }
@@ -238,22 +227,16 @@ void Menu::showLevels() {
       } else
         menuBoard.addStringAt(pos, voices[i]);
     }
-    // menuBoard.refresh();
+
     refresh();
     input = menuBoard.getInput();
-    switch (input) {
-    case KEY_UP:
-      selected = (selected - 1 + numVoices) % numVoices;
-      break;
-    case KEY_DOWN:
-      selected = (selected + 1) % numVoices;
-      break;
-    case '\n':
+    if (input == KEY_UP) selected = (selected - 1 + numVoices) % numVoices;
+    else if (input == KEY_DOWN) selected = (selected + 1) % numVoices;
+    else if (input == '\n'){
       level = selected;
       return;
-    default:
-      break;
     }
+
   }
 }
 
