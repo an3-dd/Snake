@@ -25,7 +25,7 @@ void Board::init(){
     noecho();
     keypad(stdscr, TRUE);
     clear();
-    refresh();
+    refreshW();
 }
 
 WINDOW *Board::getWin(){
@@ -34,6 +34,7 @@ WINDOW *Board::getWin(){
 
 void Board::addBorder(){
     box(win, 0, 0);
+    refreshW();
 }
 
 void Board::clear(){
@@ -41,7 +42,7 @@ void Board::clear(){
     addBorder();
 }
 
-void Board::refresh(){
+void Board::refreshW(){
     wrefresh(win);
 }
 

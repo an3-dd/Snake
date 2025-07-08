@@ -13,7 +13,7 @@ int main(int argc, char ** argv){
     Game game;
 
     // funzione : premi qualsiasi tasto per iniziare 
-    // game.begin();
+    // game.begin();aaaaaaaaa
 
     game.openMenu();
 

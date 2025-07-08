@@ -11,7 +11,7 @@
 using namespace std;
 
 Menu::Menu() {
-  // initBoard();
+  //initBoard();
   initLevels();
 }
 
@@ -129,7 +129,7 @@ void Menu::showOptions() {
       } else
         menuBoard.addStringAt(pos, voices[i]);
     }
-    menuBoard.refresh();
+    menuBoard.refreshW();
     input = menuBoard.getInput();
     switch (input) {
     case KEY_UP:
@@ -175,7 +175,7 @@ void Menu::showDeathOptions(){
       } else
         menuBoard.addStringAt(pos, voices[i]);
     }
-    menuBoard.refresh();
+    menuBoard.refreshW();
     input = menuBoard.getInput();
     switch (input) {
     case KEY_UP:
@@ -195,13 +195,13 @@ void Menu::showDeathOptions(){
 
 void Menu::open() {
   menuBoard.clear();
-  menuBoard.refresh();
+  menuBoard.refreshW();
   showOptions();
 }
 
 void Menu::openDeath(){
   menuBoard.clear();
-  menuBoard.refresh();
+  menuBoard.refreshW();
   showDeathOptions();
 }
 
@@ -234,7 +234,7 @@ void Menu::showLevels() {
       } else
         menuBoard.addStringAt(pos, voices[i]);
     }
-    menuBoard.refresh();
+    menuBoard.refreshW();
     input = menuBoard.getInput();
     switch (input) {
     case KEY_UP:
@@ -244,7 +244,7 @@ void Menu::showLevels() {
       selected = (selected + 1) % numVoices;
       break;
     case '\n':
-      setCurrentLevel(selected);
+      //setCurrentLevel(selected);
       level = selected;
       return;
     default:
@@ -253,23 +253,23 @@ void Menu::showLevels() {
   }
 }
 
-void Menu::setCurrentLevel(int d) {
+// void Menu::setCurrentLevel(int d) {
 
-  Levels *p = head;
+//   Levels *p = head;
 
-  while (p != nullptr) {
+//   while (p != nullptr) {
 
-    if (p->diff == d) {
-      currentLevel.diff = p->diff;
-      currentLevel.bonus = p->bonus;
-      strcpy(currentLevel.name, p->name);
-      currentLevel.next = nullptr;
-      currentLevel.prev = nullptr;
-      currentLevel.timeSec = p->timeSec;
-    }
-    p = p->next;
-  }
-}
+//     if (p->diff == d) {
+//       currentLevel.diff = p->diff;
+//       currentLevel.bonus = p->bonus;
+//       strcpy(currentLevel.name, p->name);
+//       currentLevel.next = nullptr;
+//       currentLevel.prev = nullptr;
+//       currentLevel.timeSec = p->timeSec;
+//     }
+//     p = p->next;
+//   }
+// }
 
 Levels Menu::getCurrentLevel() { return currentLevel; }
 
