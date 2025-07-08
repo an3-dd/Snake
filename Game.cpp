@@ -199,9 +199,9 @@ void Game::openDeathMenu(){
     gameState = onDeathScreen;
     int scelta = menu.getLevel();
 
-    if (scelta == 0) scriba.insert(score, "facile");
-    else if (scelta == 1) scriba.insert(score, "medio");
-    else if (scelta == 2) scriba.insert(score, "difficile");
+    if (scelta == 0) scriba.insert(score+100, "facile");
+    else if (scelta == 1) scriba.insert(score+200, "medio");
+    else if (scelta == 2) scriba.insert(score+300, "difficile");
 
     score = 0;
     menu.openDeath();
