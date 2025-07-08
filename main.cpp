@@ -12,9 +12,12 @@ int main(int argc, char ** argv){
 
     Game game;
 
+    // funzione : premi qualsiasi tasto per iniziare 
+    // game.begin();
+
     game.openMenu();
 
-    cout << game.getMenu().getCurrentLevel().name;
+    // cout << game.getMenu().getCurrentLevel().name;
 
 
 

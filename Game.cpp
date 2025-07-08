@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "Const.hpp"
 #include "Menu.hpp"
 #include "Position.hpp"
 #include <ncurses.h>
@@ -29,35 +30,101 @@ Position Game::randomPosition(){
     return p;
 }
 
+
+// void Game::begin(){
+//     board.clear();
+//     board.addBorder();
+//     board.addStringAt(center, "PREMI QUALSIASI TASTO PER INIZIARE");
+//     board.refresh();
+//     board.getInput();
+//     this->openMenu();
+// }
+
 void Game::processInput(){
-        int scelta = menu.getChoice();
-        switch (scelta) {
-            case 0: startGame(); break;
-            case 1: scriba.showScores(); openMenu(); break;
-            case 2: menu.showLevels(); openMenu(); break;
-            case 3: exitGame(); break;
-            default: break;
-        }
-        menu.resetChoice();
+    int scelta = menu.getChoice();
+    switch (scelta) {
+        case 0: startGame(); break;
+        case 1: scriba.showScores(); openMenu(); break;
+        case 2: menu.showLevels(); openMenu(); break;
+        case 3: exitGame(); break;
+        default: break;
+    }
+    menu.resetChoice();
+}
+
+
+void Game::processInputDeath(){
+
+    int scelta = menu.getChoice();
+    switch (scelta) {
+        case 0: openMenu(); break;
+        case 1: exitGame(); break;
+        default: break;
+    }
+    menu.resetChoice();
 }
 
 
 //SCREENS
 
+void Game::printScore(int score){
+
+    // int maxY, maxX;
+    // getmaxyx(stdscr, maxY, maxX);
+    // int win_y = (maxY / 2) - (HEIGHT / 2);
+    // int win_x = (maxX / 2) - (WIDTH / 2);
+
+    // int x = win_x + WIDTH / 2 - 7; // Centered above the window
+    // int y = win_y - 1; // One line above the window
+
+    char buffer[10];
+    sprintf(buffer, "%d", score);
+
+    board.addStringAt(0, 0, "Score: ");
+    board.addStringAt(6, 0, buffer);
+    refresh();
+}
+
+// non cred che serva realmente
+void Game::clearScore() {
+    int maxY, maxX;
+    getmaxyx(stdscr, maxY, maxX);
+    int win_y = (maxY / 2) - (HEIGHT / 2);
+    int win_x = (maxX / 2) - (WIDTH / 2);
+
+    int x = win_x + WIDTH / 2 - 7;
+    int y = win_y - 1;
+
+    // su quale finestra agisce questa funzione?
+    // mvaddnstr(y, x, str, n)
+    mvprintw(y, x, "                  ");//l'implementazione non funziona, ma non so perche
+    refresh();
+ }
+
+
+
 void Game::openMenu(){
     gameState = onMenu;
-    board.clearScore(); //NON FUNZIONA
     menu.setCurrentLevel(0);
     menu.open();
     processInput();
     
 }
 
-
-void Game::openDeathScreen(){
+// questa funzione deve salvare i dati in classifica e aprire un nuovo menu 
+// stampa: hai fatto tot punti, 
+// poi mostra opzioni: esci, torna al menu
+void Game::openDeathMenu(){
     gameState = onDeathScreen;
+    scriba.insert(score, menu.getCurrentLevel().name);
+    score = 0;
+    menu.openDeath();
+    mvwprintw(menu.getMenuBoard().getWin(), 0, 0, "HAI FATTO TOT PUNTI");
+    wrefresh(menu.getMenuBoard().getWin());
+    processInputDeath();
+
     //TODO bisogna stampare il punteggio e dare la possibilità di tornare al menu
-    openMenu(); //va tolto e messo come opzione
+    // openMenu(); //va tolto e messo come opzione
 }
 
 
@@ -79,8 +146,8 @@ void Game::startGame(){
 
     spawnApples();
 
-    score = 0;
-    board.printScore(score); // Show initial score
+    // score = 0;
+    printScore(score); // Show initial score
 
     int baseDelay = 200; // ms
     int speedMult = 1;
@@ -116,7 +183,8 @@ void Game::startGame(){
             }
             //open menu
             case 'm': {
-                openMenu(); break;
+                openMenu();
+                break;
             }
 
             default: break;
@@ -126,7 +194,7 @@ void Game::startGame(){
         board.refresh();
         napms(baseDelay / speedMult);
     }
-
+    scriba.insert(score, menu.getCurrentLevel().name);
     endwin();
     exit(0);
 
@@ -202,7 +270,7 @@ void Game::updateSnake(Direction inputDirection) {
 
     //check if movement is valid
     if (!snake.move(inputDirection)) {
-        openDeathScreen();
+        openDeathMenu();
         return;
     }
 
@@ -242,7 +310,7 @@ void Game::updateSnake(Direction inputDirection) {
     board.addCharAt(snake.getHead(), snake.getHeadIcon());
 
     //if an apple was eaten, print the score
-    if (ateApple) board.printScore(score); 
+    if (ateApple) printScore(score); 
     
     board.refresh();
 }

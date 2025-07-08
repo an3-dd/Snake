@@ -11,10 +11,8 @@
 using namespace std;
 
 Menu::Menu() {
-
-  initBoard();
+  // initBoard();
   initLevels();
-  showOptions();
 }
 
 // aggiunge i livelli alla lista bidirezionale
@@ -149,10 +147,62 @@ void Menu::showOptions() {
   }
 }
 
+void Menu::showDeathOptions(){
+
+  char menu[] = "TORNA AL MENU";
+  char esci[] = "ESCI";
+
+  char *voices[] = { menu, esci};
+  int numVoices = 2;
+  int selected = 0;
+  int input = 0;
+
+  Position center;
+  Position pos;
+  center.x = WIDTH / 2;
+  center.y = HEIGHT / 2;
+  keypad(menuBoard.getWin(), TRUE);
+  curs_set(0);
+  while (true) { // DA TOGLIERE PRE
+    menuBoard.clear();
+    for (int i = 0; i < numVoices; i++) {
+      pos.x = center.x;
+      pos.y = (HEIGHT - numVoices) / 2 + i;
+      if (i == selected) {
+        wattron(menuBoard.getWin(), A_REVERSE);
+        menuBoard.addStringAt(pos, voices[i]);
+        wattroff(menuBoard.getWin(), A_REVERSE);
+      } else
+        menuBoard.addStringAt(pos, voices[i]);
+    }
+    menuBoard.refresh();
+    input = menuBoard.getInput();
+    switch (input) {
+    case KEY_UP:
+      selected = (selected - 1 + numVoices) % numVoices;
+      break;
+    case KEY_DOWN:
+      selected = (selected + 1) % numVoices;
+      break;
+    case '\n':
+      this->choice = selected;
+      return;
+    default:
+      break;
+    }
+  }
+}
+
 void Menu::open() {
   menuBoard.clear();
   menuBoard.refresh();
   showOptions();
+}
+
+void Menu::openDeath(){
+  menuBoard.clear();
+  menuBoard.refresh();
+  showDeathOptions();
 }
 
 void Menu::showLevels() {
@@ -226,3 +276,7 @@ Levels Menu::getCurrentLevel() { return currentLevel; }
 int Menu::getChoice() { return this->choice; }
 
 void Menu::resetChoice() { this->choice = -1; }
+
+Board Menu::getMenuBoard(){
+  return menuBoard;
+}

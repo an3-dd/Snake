@@ -34,8 +34,12 @@ class Board{
     // add a char in a point
     void addCharAt(Position pos, chtype ch);
 
+    void addCharAt(int x, int y, chtype ch);
+
     // add an array of char in position pos
     void addStringAt(Position pos, char str[]);
+
+    void addStringAt(int x, int y, char str[]);
 
     // return the button's code of a pressed button
     int getInput();
@@ -49,10 +53,4 @@ class Board{
     // return true if the x, y, dot is empty
     bool isEmpty(Position pos);
 
-    // print the score above the window
-    void printScore(int score);
-
-    // clear the score from the board
-    void clearScore();
-    
 };

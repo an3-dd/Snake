@@ -22,8 +22,6 @@ class Menu{
 
     protected:
 
-    // Scriba scriba;
-
     // genera una finestra, è un costruttore di una board
     Board menuBoard;
 
@@ -43,10 +41,17 @@ class Menu{
 
     Menu();
 
+    Board getMenuBoard();
+
     // print options in the menu board (play, view stats ...)
     // questa funzione al termine della sua esecuzione setta il parametro
     // choice in base alla voce sulla quale è stato premuto invio
     void showOptions();
+
+    // show options in the menu board after death
+    void showDeathOptions();
+
+    void openDeath();
 
     int getLevel();
 
@@ -91,6 +96,7 @@ class Menu{
 
     // set the parameter choice to -1
     void resetChoice();
+
 
 
 };

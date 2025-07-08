@@ -9,8 +9,8 @@
 #include "Scriba.hpp"
 
 //for the randomizer
-#include "cstdlib"
-#include "ctime"
+// #include "cstdlib"
+// #include "ctime"
 
 enum GameState {onGame, onMenu, onPause, onDeathScreen};
 
@@ -40,6 +40,17 @@ class Game{
 
     Game();
 
+
+    // // print the score above the window
+    void printScore(int score);
+
+    // clear the score from the board
+    void clearScore();    
+
+
+    // tentativo di fix bug doppio clic on menu
+    void begin();
+
     void startGame();
 
     void exitGame();
@@ -54,9 +65,13 @@ class Game{
 
     void openMenu();
 
+    // process the menu input
     void processInput();
 
-    void openDeathScreen();
+    // process the deathMenu input
+    void processInputDeath();
+
+    void openDeathMenu();
 
     GameState getGameState();
 
