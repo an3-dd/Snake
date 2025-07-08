@@ -8,7 +8,7 @@ int main(int argc, char ** argv){
     // initscr();
     // refresh();
     // noecho();
-    // curs_set(0);
+    // curs_set(0);aaaaa
 
     Game game;
 

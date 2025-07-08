@@ -105,7 +105,6 @@ void Game::clearScore() {
 
 void Game::openMenu(){
     gameState = onMenu;
-    menu.setCurrentLevel(0);
     menu.open();
     processInput();
     
@@ -116,7 +115,13 @@ void Game::openMenu(){
 // poi mostra opzioni: esci, torna al menu
 void Game::openDeathMenu(){
     gameState = onDeathScreen;
-    scriba.insert(score, menu.getCurrentLevel().name);
+    int scelta = menu.getLevel();
+    switch (scelta) {
+        case 0: scriba.insert(score, "facile"); break;
+        case 1: scriba.insert(score, "medio"); break;
+        case 2: scriba.insert(score, "difficile"); break;
+        default: break;
+    }
     score = 0;
     menu.openDeath();
     mvwprintw(menu.getMenuBoard().getWin(), 0, 0, "HAI FATTO TOT PUNTI");
@@ -142,12 +147,18 @@ void Game::startGame(){
     //board.clear(); // Ensure border is drawn before anything else
     snake.reset(); // Reset snake state
 
+    board.addBorder();
+    refresh();
+
     initPrintSnake();
+    refresh();
 
     spawnApples();
+    refresh();
 
     // score = 0;
     printScore(score); // Show initial score
+    refresh();
 
     int baseDelay = 200; // ms
     int speedMult = 1;
@@ -194,7 +205,13 @@ void Game::startGame(){
         board.refresh();
         napms(baseDelay / speedMult);
     }
-    scriba.insert(score, menu.getCurrentLevel().name);
+    int scelta = menu.getLevel();
+    switch (scelta) {
+        case 0: scriba.insert(score, "facile"); break;
+        case 1: scriba.insert(score, "medio"); break;
+        case 2: scriba.insert(score, "difficile"); break;
+        default: break;
+    }
     endwin();
     exit(0);
 

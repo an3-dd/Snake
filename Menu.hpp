@@ -28,7 +28,7 @@ class Menu{
     Levels *head = nullptr;
     Levels currentLevel;
     int choice = -1;
-    int level = -1;
+    int level = 0;
     bool isOpen;
 
 
@@ -85,9 +85,9 @@ class Menu{
 
     // cerca il livello con la difficolta = diff
     // copia in currentLevel il livello trovato
-    void setCurrentLevel(int diff);
+    // void setCurrentLevel(int diff);
 
-    Levels getCurrentLevel();
+    // Levels getCurrentLevel();
 
     // clean classifica.txt
     // void cleanPodium();

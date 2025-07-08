@@ -244,7 +244,6 @@ void Menu::showLevels() {
       selected = (selected + 1) % numVoices;
       break;
     case '\n':
-      setCurrentLevel(selected);
       level = selected;
       return;
     default:
@@ -253,25 +252,6 @@ void Menu::showLevels() {
   }
 }
 
-void Menu::setCurrentLevel(int d) {
-
-  Levels *p = head;
-
-  while (p != nullptr) {
-
-    if (p->diff == d) {
-      currentLevel.diff = p->diff;
-      currentLevel.bonus = p->bonus;
-      strcpy(currentLevel.name, p->name);
-      currentLevel.next = nullptr;
-      currentLevel.prev = nullptr;
-      currentLevel.timeSec = p->timeSec;
-    }
-    p = p->next;
-  }
-}
-
-Levels Menu::getCurrentLevel() { return currentLevel; }
 
 int Menu::getChoice() { return this->choice; }
 

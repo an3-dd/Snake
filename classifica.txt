@@ -1,3 +1,8 @@
-22 facile
-10 facile
+9 medio
+5 difficile
+3 facile
+3 medio
+1 facile
+1 facile
+1 facile
 0 facile
