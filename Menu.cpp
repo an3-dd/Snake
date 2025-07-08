@@ -129,7 +129,8 @@ void Menu::showOptions() {
       } else
         menuBoard.addStringAt(pos, voices[i]);
     }
-    menuBoard.refresh();
+    // menuBoard.refresh();
+    refresh();
     input = menuBoard.getInput();
     switch (input) {
     case KEY_UP:
@@ -175,7 +176,8 @@ void Menu::showDeathOptions(){
       } else
         menuBoard.addStringAt(pos, voices[i]);
     }
-    menuBoard.refresh();
+    // menuBoard.refresh();
+    refresh();
     input = menuBoard.getInput();
     switch (input) {
     case KEY_UP:
@@ -195,13 +197,15 @@ void Menu::showDeathOptions(){
 
 void Menu::open() {
   menuBoard.clear();
-  menuBoard.refresh();
+  // menuBoard.refresh();
+  refresh();
   showOptions();
 }
 
 void Menu::openDeath(){
   menuBoard.clear();
-  menuBoard.refresh();
+  // menuBoard.refresh();
+  refresh();
   showDeathOptions();
 }
 
@@ -234,7 +238,8 @@ void Menu::showLevels() {
       } else
         menuBoard.addStringAt(pos, voices[i]);
     }
-    menuBoard.refresh();
+    // menuBoard.refresh();
+    refresh();
     input = menuBoard.getInput();
     switch (input) {
     case KEY_UP:

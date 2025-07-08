@@ -9,8 +9,8 @@
 #include "Scriba.hpp"
 
 //for the randomizer
-// #include "cstdlib"
-// #include "ctime"
+#include "cstdlib"
+#include "ctime"
 
 enum GameState {onGame, onMenu, onPause, onDeathScreen};
 
@@ -36,13 +36,18 @@ class Game{
 
     Direction currentDirection; // stores the current direction for auto-move
 
+    time_t startTime;
+    int timeLimit = 300; // 5 minutes in seconds
+    time_t pauseTime = 0;
+    int timePaused = 0;
+
     public:
 
     Game();
 
 
     // // print the score above the window
-    void printScore(int score);
+    void printScore();
 
     // clear the score from the board
     void clearScore();    
@@ -91,6 +96,8 @@ class Game{
     void initPrintSnake();
 
     void updateSnake(Direction inputDirection);
+
+    void printTimer();
 
 
 };

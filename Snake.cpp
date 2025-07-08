@@ -18,7 +18,7 @@ Snake::Snake(){
     headPosition = Position(centerX, centerY); 
     tailPosition = Position(centerX, centerY-1+SNAKE_LENGTH); //(0,0) in upper-left angle
 
-    currentDirection = NONE;
+    currentDirection = UP;
     indexCircular = 0;
     for(int i=0; i<SNAKE_LENGTH; i++){
         dirHistory[i] = UP; //this is because the snake is initialized vertically
@@ -148,7 +148,7 @@ void Snake::reset() { //it's the same as the constructor, but it resets the snak
     }
     headPosition = Position(centerX, centerY);
     tailPosition = Position(centerX, centerY - 1 + SNAKE_LENGTH);
-    currentDirection = NONE;
+    currentDirection = UP;
     indexCircular = 0;
     for (int i = 0; i < SNAKE_LENGTH; i++) {
         dirHistory[i] = UP;

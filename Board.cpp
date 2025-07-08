@@ -41,9 +41,9 @@ void Board::clear(){
     addBorder();
 }
 
-void Board::refresh(){
-    wrefresh(win);
-}
+// void Board::refresh(){
+//     wrefresh(win);
+// }
 
 void Board::addCharAt(int x, int y, chtype ch){
     mvwaddch(win, y, x, ch);
@@ -94,5 +94,7 @@ void Board::rmCharAt(Position p){
 bool Board::isEmpty(Position p){
     return mvwinch(win, p.y, p.x) == ' ';
 }
+
+// Removed printTimer from Board, now handled in Game
 
 

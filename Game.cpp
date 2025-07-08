@@ -8,7 +8,7 @@ using namespace std;
 
 Game::Game(){
     srand(time(0));
-    score = 0;
+    
     center.x = WIDTH/2;
     center.y = HEIGHT/2;
     gameState = onMenu;
@@ -29,16 +29,6 @@ Position Game::randomPosition(){
     p.y = rand() % HEIGHT;
     return p;
 }
-
-
-// void Game::begin(){
-//     board.clear();
-//     board.addBorder();
-//     board.addStringAt(center, "PREMI QUALSIASI TASTO PER INIZIARE");
-//     board.refresh();
-//     board.getInput();
-//     this->openMenu();
-// }
 
 void Game::processInput(){
     int scelta = menu.getChoice();
@@ -67,15 +57,7 @@ void Game::processInputDeath(){
 
 //SCREENS
 
-void Game::printScore(int score){
-
-    // int maxY, maxX;
-    // getmaxyx(stdscr, maxY, maxX);
-    // int win_y = (maxY / 2) - (HEIGHT / 2);
-    // int win_x = (maxX / 2) - (WIDTH / 2);
-
-    // int x = win_x + WIDTH / 2 - 7; // Centered above the window
-    // int y = win_y - 1; // One line above the window
+void Game::printScore() {
 
     char buffer[10];
     sprintf(buffer, "%d", score);
@@ -99,20 +81,130 @@ void Game::clearScore() {
     // mvaddnstr(y, x, str, n)
     mvprintw(y, x, "                  ");//l'implementazione non funziona, ma non so perche
     refresh();
- }
+}
+
+void Game::printTimer() {
+    int elapsedPause = 0;
+    if (gameState == onMenu && pauseTime > 0) {
+        elapsedPause = (int)(pauseTime - startTime);
+    } else {
+        elapsedPause = (int)(time(nullptr) - startTime);
+    }
+    int secondsLeft = timeLimit - elapsedPause;
+    if (secondsLeft < 0) secondsLeft = 0;
+    int min = secondsLeft / 60;
+    int sec = secondsLeft % 60;
+    char buffer[16];
+    sprintf(buffer, "%02d:%02d", min, sec);
+    board.addStringAt(20, 0, "Timer: ");
+    board.addStringAt(27, 0, buffer);
+    refresh();
+}
 
 
 
 void Game::openMenu(){
+    // Pause the timer
+    if (gameState == onGame) {
+        pauseTime = time(nullptr);
+    }
     gameState = onMenu;
     menu.open();
     processInput();
-    
 }
 
-// questa funzione deve salvare i dati in classifica e aprire un nuovo menu 
-// stampa: hai fatto tot punti, 
-// poi mostra opzioni: esci, torna al menu
+void Game::startGame(){
+    gameState = onGame;
+
+    board.init();
+    snake.reset();
+
+    board.addBorder();
+    refresh();
+
+    initPrintSnake();
+    refresh();
+
+    spawnApples();
+    refresh();
+
+    printScore();
+    refresh();
+
+    // TIMER SETUP
+    if (pauseTime > 0) {
+        // Resume timer
+        startTime += (time(nullptr) - pauseTime);
+    } else {
+        startTime = time(nullptr);
+    }
+    pauseTime = 0;
+    printTimer();
+    refresh();
+    int baseDelay = 200;
+    int speedMult = 1;
+    switch (menu.getLevel()) {
+        case 0: speedMult = 1; break;
+        case 1: speedMult = 3; break;
+        case 2: speedMult = 5; break;
+        default: speedMult = 1; break;
+    }
+    nodelay(stdscr, TRUE);
+    char c = 0;
+    while (gameState == onGame && c != 'q'){
+        c = getch();
+        switch (c) {
+            case 'w': currentDirection = UP; break;
+            case 's': currentDirection = DOWN; break;
+            case 'a': currentDirection = LEFT; break;
+            case 'd': currentDirection = RIGHT; break;
+            case 'k': {
+                Position p = randomPosition();
+                printApple(p); break;
+            }
+            case 'b': {
+                char ciao[10];
+                strcpy(ciao, "ciao");
+                Position a = randomPosition();
+                getBoard().addStringAt(a, ciao); break;
+            }
+            case 'm': {
+                openMenu();
+                break;
+            }
+            default: break;
+        }
+        updateSnake(currentDirection);
+        // TIMER UPDATE (freeze if paused)
+        int elapsed;
+        if (gameState == onMenu && pauseTime > 0) {
+            elapsed = (int)(pauseTime - startTime);
+        } else {
+            elapsed = (int)(time(nullptr) - startTime);
+        }
+        int secondsLeft = timeLimit - elapsed;
+        if (secondsLeft < 0) secondsLeft = 0;
+        printTimer();
+        if (secondsLeft == 0) {
+            openDeathMenu();
+            break;
+        }
+        refresh();
+        napms(baseDelay / speedMult);
+    }
+    int scelta = menu.getLevel();
+    switch (scelta) {
+        case 0: scriba.insert(score, "facile"); break;
+        case 1: scriba.insert(score, "medio"); break;
+        case 2: scriba.insert(score, "difficile"); break;
+        default: break;
+    }
+    endwin();
+    exit(0);
+}
+
+
+
 void Game::openDeathMenu(){
     gameState = onDeathScreen;
     int scelta = menu.getLevel();
@@ -128,95 +220,7 @@ void Game::openDeathMenu(){
     wrefresh(menu.getMenuBoard().getWin());
     processInputDeath();
 
-    //TODO bisogna stampare il punteggio e dare la possibilità di tornare al menu
-    // openMenu(); //va tolto e messo come opzione
 }
-
-
-
-void Game::exitGame(){
-    endwin();
-    exit(0);
-}
-
-void Game::startGame(){
-
-    gameState = onGame;
-
-    board.init();
-    //board.clear(); // Ensure border is drawn before anything else
-    snake.reset(); // Reset snake state
-
-    board.addBorder();
-    refresh();
-
-    initPrintSnake();
-    refresh();
-
-    spawnApples();
-    refresh();
-
-    // score = 0;
-    printScore(score); // Show initial score
-    refresh();
-
-    int baseDelay = 200; // ms
-    int speedMult = 1;
-    switch (menu.getLevel()) {
-        case 0: speedMult = 1; break; // easy
-        case 1: speedMult = 3; break; // medium
-        case 2: speedMult = 5; break; // hard
-        default: speedMult = 1; break;
-    }
-    
-    nodelay(stdscr, TRUE); // Make getch() non-blocking
-
-    char c = 0;
-    while (gameState == onGame && c != 'q'){
-        c = getch();
-        switch (c) {
-            //movement
-            case 'w': currentDirection = UP; break;
-            case 's': currentDirection = DOWN; break;
-            case 'a': currentDirection = LEFT; break;
-            case 'd': currentDirection = RIGHT; break;
-            //DEBUG print apple in random position
-            case 'k': {
-                Position p = randomPosition();
-                printApple(p); break;
-            }
-            //DEBUG print string
-            case 'b': {
-                char ciao[10];
-                strcpy(ciao, "ciao");
-                Position a = randomPosition();
-                getBoard().addStringAt(a, ciao); break;
-            }
-            //open menu
-            case 'm': {
-                openMenu();
-                break;
-            }
-
-            default: break;
-
-        }
-        updateSnake(currentDirection); //automatic movement
-        board.refresh();
-        napms(baseDelay / speedMult);
-    }
-    int scelta = menu.getLevel();
-    switch (scelta) {
-        case 0: scriba.insert(score, "facile"); break;
-        case 1: scriba.insert(score, "medio"); break;
-        case 2: scriba.insert(score, "difficile"); break;
-        default: break;
-    }
-    endwin();
-    exit(0);
-
-}
-
 
 
 //GETTER METHODS
@@ -278,7 +282,8 @@ void Game::initPrintSnake(){ //only called at the start
         board.addCharAt(delta, this->snake.getBodyIcon());
     }
 
-    board.refresh();
+    // board.refresh();
+    refresh();
 }
 
 void Game::updateSnake(Direction inputDirection) {
@@ -327,7 +332,14 @@ void Game::updateSnake(Direction inputDirection) {
     board.addCharAt(snake.getHead(), snake.getHeadIcon());
 
     //if an apple was eaten, print the score
-    if (ateApple) printScore(score); 
+    if (ateApple) printScore(); 
     
-    board.refresh();
+    // board.refresh();
+    refresh();
 }
+
+void Game::exitGame() {
+    endwin();
+    exit(0);
+}
+
