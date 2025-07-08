@@ -140,14 +140,14 @@ void Scriba::showScores() {
     scoreBoard.addStringAt({(WIDTH - 42) / 2, center.y++}, (char*)"premi qualsiasi tasto per tornare al menu");
     scoreBoard.addStringAt({(WIDTH - 45) / 2, center.y++}, (char*)"oppure premi c per resettare tutta la classifica");
 
-    scoreBoard.refreshW();
+    scoreBoard.refresh();
 
 
     int c = scoreBoard.getInput();
 
     if (c == 'c' || c == 'C') {
         cleanPodium();
-        scoreBoard.refreshW();
+        scoreBoard.refresh();
     }
 }
 

@@ -85,7 +85,7 @@ void Game::printScore(int score){
     refresh();
 }
 
-// non cred che serva realmentepenMenu();
+// non cred che serva realmente
 void Game::clearScore() {
     int maxY, maxX;
     getmaxyx(stdscr, maxY, maxX);
@@ -105,6 +105,7 @@ void Game::clearScore() {
 
 void Game::openMenu(){
     gameState = onMenu;
+    menu.setCurrentLevel(0);
     menu.open();
     processInput();
     
@@ -138,19 +139,15 @@ void Game::startGame(){
     gameState = onGame;
 
     board.init();
-    board.addBorder();
-
     //board.clear(); // Ensure border is drawn before anything else
     snake.reset(); // Reset snake state
 
     initPrintSnake();
 
     spawnApples();
-    refresh();
 
     // score = 0;
     printScore(score); // Show initial score
-    refresh();
 
     int baseDelay = 200; // ms
     int speedMult = 1;
@@ -194,7 +191,7 @@ void Game::startGame(){
 
         }
         updateSnake(currentDirection); //automatic movement
-        board.refreshW();
+        board.refresh();
         napms(baseDelay / speedMult);
     }
     scriba.insert(score, menu.getCurrentLevel().name);
@@ -264,7 +261,7 @@ void Game::initPrintSnake(){ //only called at the start
         board.addCharAt(delta, this->snake.getBodyIcon());
     }
 
-    board.refreshW();
+    board.refresh();
 }
 
 void Game::updateSnake(Direction inputDirection) {
@@ -315,5 +312,5 @@ void Game::updateSnake(Direction inputDirection) {
     //if an apple was eaten, print the score
     if (ateApple) printScore(score); 
     
-    board.refreshW();
+    board.refresh();
 }

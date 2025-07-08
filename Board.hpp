@@ -26,7 +26,7 @@ class Board{
     void addBorder();
 
     // refresh the board's content
-    void refreshW();
+    void refresh();
 
     // delete the board's content
     void clear();

@@ -28,7 +28,7 @@ class Menu{
     Levels *head = nullptr;
     Levels currentLevel;
     int choice = -1;
-    int level = 0;
+    int level = -1;
     bool isOpen;
 
 
