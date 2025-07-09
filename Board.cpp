@@ -17,12 +17,22 @@ Board::Board() {
   init();
 }
 
-void Board::init() {
-  cbreak();
-  noecho();
-  keypad(stdscr, TRUE);
-  clear();
-  refresh();
+Board::~Board() {
+    if (win) delwin(win);
+}
+
+void Board::init(){
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    clear();
+    refresh();
+
+    if (has_colors()) {
+        start_color();
+        init_pair(1, COLOR_RED, COLOR_BLACK);   // Apple color
+        init_pair(2, COLOR_GREEN, COLOR_BLACK); // Snake color
+    }
 }
 
 WINDOW *Board::getWin() { return this->win; }
@@ -42,6 +52,13 @@ void Board::addCharAt(int x, int y, chtype ch) {
 void Board::addCharAt(Position p, chtype ch) {
   mvwaddch(win, p.y, p.x, ch);
   wrefresh(win);
+}
+
+void Board::addCharAt(Position pos, chtype ch, int colorPair) {
+    wattron(win, COLOR_PAIR(colorPair));
+    mvwaddch(win, pos.y, pos.x, ch);
+    wattroff(win, COLOR_PAIR(colorPair));
+    wrefresh(win);
 }
 
 void Board::addStringAt(Position p, char str[]) {
@@ -79,4 +96,6 @@ void Board::rmCharAt(Position p) {
 }
 
 bool Board::isEmpty(Position p) { return mvwinch(win, p.y, p.x) == ' '; }
+
+
 

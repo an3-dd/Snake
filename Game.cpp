@@ -234,7 +234,7 @@ GameState Game::getGameState(){
 //APPLE METHODS
 
 void Game::printApple(Position p){
-    if (board.isEmpty(p)) board.addCharAt(p, this->apple[0].getIcon()); //the apple index doesn't matter
+    if (board.isEmpty(p)) board.addCharAt(p, this->apple[0].getIcon(), 1); // 1 = rosso
 }
 
 void Game::removeApple(Position p){
@@ -260,17 +260,15 @@ void Game::spawnApples(){
 
 void Game::initPrintSnake(){ //only called at the start
     //add head
-    board.addCharAt(center, this->snake.getHeadIcon());
+    board.addCharAt(center, this->snake.getHeadIcon(), 2); // 2 = verde
 
     //add body
     //delta is the position where to spawn the next segment
     Position delta = center; 
     for(int i=1; i<SNAKE_LENGTH; i++){
         delta.y = center.y+i;
-        board.addCharAt(delta, this->snake.getBodyIcon());
+        board.addCharAt(delta, this->snake.getBodyIcon(), 2); // 2 = verde
     }
-
-    // board.refresh();
     refresh();
 }
 
@@ -294,23 +292,18 @@ void Game::updateSnake(Direction inputDirection) {
 
     while (i < 10 && !done){
         if (apple[i].getPosition() == newHead) {
-            
-            //score management
             int scelta = menu.getCurrentLevel().diff;
             if (scelta == 0) score += 1;
             else if (scelta == 1) score += 3;
             else if (scelta == 2) score += 5;
 
             ateApple = true;
-
-            // remove old apple
             removeApple(apple[i].getPosition());
 
-            // generate a new one
             Position newPos;
             do {
                 newPos = randomPosition();
-            } while (!board.isEmpty(newPos)); // avoid spawning on the snake
+            } while (!board.isEmpty(newPos));
 
             apple[i] = Apple(newPos);
             printApple(newPos);
@@ -320,8 +313,8 @@ void Game::updateSnake(Direction inputDirection) {
     }
 
     //draw body and head
-    board.addCharAt(previousHead, snake.getBodyIcon());
-    board.addCharAt(snake.getHead(), snake.getHeadIcon());
+    board.addCharAt(previousHead, snake.getBodyIcon(), 2); // verde
+    board.addCharAt(snake.getHead(), snake.getHeadIcon(), 2); // verde
 
     //if an apple was eaten, print the score
     if (ateApple) printScore(); 

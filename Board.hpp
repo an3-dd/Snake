@@ -15,6 +15,7 @@ class Board{
     public:
 
     Board();
+    ~Board();
 
     // return the board's window
     WINDOW *getWin();
@@ -35,6 +36,8 @@ class Board{
     void addCharAt(Position pos, chtype ch);
 
     void addCharAt(int x, int y, chtype ch);
+
+    void addCharAt(Position pos, chtype ch, int colorPair);
 
     // add an array of char in position pos
     void addStringAt(Position pos, char str[]);

@@ -14,7 +14,14 @@ Menu::Menu() {
   initLevels();
 }
 
-
+Menu::~Menu() {
+    Levels* p = head;
+    while (p != nullptr) {
+        Levels* next = p->next;
+        delete p;
+        p = next;
+    }
+}
 
 void Menu::setCurrentLevel(){
 
@@ -126,7 +133,8 @@ void Menu::showOptions() {
   while (!done) {
     menuBoard.clear();
     for (int i = 0; i < numVoices; i++) {
-      pos.x = center.x;
+      int len = strlen(voices[i]);
+      pos.x = center.x - len / 2; // centra la voce rispetto all'asse x
       pos.y = (HEIGHT - numVoices) / 2 + i;
       if (i == selected) {
         wattron(menuBoard.getWin(), A_REVERSE);
@@ -224,7 +232,8 @@ void Menu::showLevels() {
   while (true) {
     menuBoard.clear();
     for (int i = 0; i < numVoices; i++) {
-      pos.x = center.x;
+      int len = strlen(voices[i]);
+      pos.x = center.x - len / 2; // centra la voce rispetto all'asse x
       pos.y = (HEIGHT - numVoices) / 2 + i;
       if (i == selected) {
         wattron(menuBoard.getWin(), A_REVERSE);

@@ -36,6 +36,7 @@ class Menu{
     public:
 
     Menu();
+    ~Menu();
 
     void setCurrentLevel();
 
