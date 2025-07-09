@@ -14,6 +14,29 @@ Menu::Menu() {
   initLevels();
 }
 
+
+
+void Menu::setCurrentLevel(){
+
+  Levels *p = head;
+
+  while (p != nullptr){
+
+    if (p->diff == choice){
+      currentLevel.diff = p->diff;
+      strcpy(currentLevel.name, p->name);
+    }
+
+    p = p->next;
+  }
+  cerr << "qualcosa è andato storto";
+}
+
+
+Levels Menu::getCurrentLevel(){
+  return this->currentLevel;
+}
+
 // aggiunge i livelli alla lista bidirezionale
 bool Menu::addLevel(int d, char name[]) {
 
@@ -22,8 +45,6 @@ bool Menu::addLevel(int d, char name[]) {
   Levels *n = new Levels;
   n->diff = d;
   strcpy(n->name, name);
-  n->timeSec *= 10 * n->diff;
-  n->bonus = 5 * (n->diff + 1);
   n->prev = nullptr;
   n->next = nullptr;
 
@@ -67,22 +88,6 @@ bool Menu::addLevel(int d, char name[]) {
   return done;
 }
 
-int Menu::getLevel() { return level; }
-
-void Menu::printLevels() {
-
-  Levels *p = head;
-
-  while (p != nullptr) {
-
-    cout << "nome livello: " << p->name << endl;
-    cout << "difficolta: " << p->diff << endl;
-    cout << "bonus: " << p->bonus << endl;
-    cout << "durata livello: " << p->timeSec << endl;
-    cout << endl;
-    p = p->next;
-  }
-}
 
 void Menu::initLevels() {
 
@@ -199,6 +204,7 @@ void Menu::openDeath(){
 }
 
 void Menu::showLevels() {
+
   char facile[] = "FACILE";
   char medio[] = "MEDIO";
   char difficile[] = "DIFFICILE";
@@ -233,7 +239,9 @@ void Menu::showLevels() {
     if (input == KEY_UP) selected = (selected - 1 + numVoices) % numVoices;
     else if (input == KEY_DOWN) selected = (selected + 1) % numVoices;
     else if (input == '\n'){
-      level = selected;
+      this->choice = selected;
+      setCurrentLevel();
+      resetChoice();
       return;
     }
 

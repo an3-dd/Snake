@@ -5,17 +5,7 @@
 #include "Const.hpp"
 
 
-
-
 using namespace std;
-
-
-
-struct ScoreEntry {
-    int points;
-    char level[50] = {0};
-};
-
 
 
 
@@ -24,23 +14,7 @@ class Scriba {
 
 protected:
 
-
-    static const int MAX_SCORES = 100;
     Board scoreBoard;
-
-
-    // l'array scores tiene un massimo di punteggi che la classifica puo immagazzinare
-    // la variabile coutn, ci dice quanti ce ne sono memorizzati al momento
-    // ScoreEntry scores[MAX_SCORES];
-
-    int count = 0;
-
-
-    // semplice bubble sort decrescente per points
-    void sortScores();
-
-
-    
 
 public:
 
@@ -48,25 +22,19 @@ public:
     // costruttore
     Scriba();
 
-    // remove the file's content
+    // rimuove il contenuto del file
     void cleanPodium();
 
+    // inizializza scoreBoard
     void initBoard();
 
-    int getCount();
-
-    // funzione che salva le score all'interno del file classifica.txt
-    // mediante l'uso di ofstream
-    void saveScore(int points, const char* level);
-
+    // funzione ausiliaria di insert
     void insertRec(char righe[][RAW_LEN], int pos, int pts, const char level[]);
+
+    // inserisce una riga contenente il punteggio e il livello in modo ordinato dentro la classifica.txt 
     void insert(int pts, const char level[]);
 
-
-
-
-
-    // funzione che mostra i dati salvati all'interno del file classifica.txt
+    // mostra i dati salvati all'interno del file classifica.txt
     // mediante l'uso di ifstream
     void showScores();
 

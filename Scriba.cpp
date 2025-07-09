@@ -13,11 +13,6 @@ void Scriba::initBoard(){
     scoreBoard.init();
 }
 
-
-int Scriba::getCount(){
-    return this->count;
-}
-
 void Scriba::showScores() {
 
     scoreBoard.clear();

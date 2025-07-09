@@ -8,8 +8,6 @@
 struct Levels {
     char name[30];
     int diff = 0;
-    int bonus = 0; //default value
-    int timeSec = 60;
     Levels *next;
     Levels *prev;
 };
@@ -22,14 +20,12 @@ class Menu{
 
     protected:
 
-    // genera una finestra, è un costruttore di una board
+    // board del menu
     Board menuBoard;
-
+    // testa della lista dei livelli del menu
     Levels *head = nullptr;
     Levels currentLevel;
     int choice = -1;
-    int level = 0;
-    bool isOpen;
 
 
 
@@ -41,58 +37,34 @@ class Menu{
 
     Menu();
 
+    void setCurrentLevel();
+
+    Levels getCurrentLevel();
+
     Board getMenuBoard();
 
-    // print options in the menu board (play, view stats ...)
-    // questa funzione al termine della sua esecuzione setta il parametro
-    // choice in base alla voce sulla quale è stato premuto invio
+    // mostra le opzioni selezionabili
     void showOptions();
 
-    // show options in the menu board after death
+    // mostra le opzioni selezionabili nel menu di morte
     void showDeathOptions();
 
     void openDeath();
 
-    int getLevel();
-
-    void startGame();
-
-    void showScore();
-
-    void exitGame();
-
     // add a level in the list
     bool addLevel(int d, char name[]);
-
-    // print all levels in the list
-    void printLevels();
 
     void initBoard();
 
     void open();
 
-    void close();
-
-    void goUp();
-
-    void goDown();
-
     int getChoice();
 
     void showLevels();
 
-    void viewPodium();
-
     // cerca il livello con la difficolta = diff
     // copia in currentLevel il livello trovato
-    // void setCurrentLevel(int diff);
-
-    // Levels getCurrentLevel();
-
-    // clean classifica.txt
-    // void cleanPodium();
-
-    void addScore(char name[]);
+    void setCurrentLevel(int diff);
 
     // set the parameter choice to -1
     void resetChoice();

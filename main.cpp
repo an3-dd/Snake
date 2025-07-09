@@ -1,10 +1,11 @@
-#include <ncurses.h>
+#include <iostream>
 #include "Game.hpp"
 
+using namespace std;
 
-int main(int argc, char ** argv){
 
-    Game game;
+int main(){
 
-    return 0;
+  Game game;
+  return 0;
 }

@@ -30,9 +30,6 @@ class Game{
 
     int score;
 
-    // inutile perche lo trovi in getMenu().getCurrentLevel().bonus;
-    // int bonus; //bonus is the score multiplier based on level
-
     Direction currentDirection; // stores the current direction for auto-move
 
     time_t startTime;
@@ -45,21 +42,12 @@ class Game{
     Game();
 
 
-    // // print the score above the window
+    // print the score above the window
     void printScore();
-
-    // clear the score from the board
-    void clearScore();    
-
-
-    // tentativo di fix bug doppio clic on menu
-    void begin();
 
     void startGame();
 
     void exitGame();
-
-    void showScore();
 
     Scriba getScriba();
 

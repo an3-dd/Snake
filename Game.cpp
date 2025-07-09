@@ -3,6 +3,7 @@
 #include "Menu.hpp"
 #include "Position.hpp"
 #include <ncurses.h>
+
 using namespace std;
 
 
@@ -141,11 +142,11 @@ void Game::startGame(){
 
     int baseDelay = 200;
     int speedMult = 1;
-    int scelta = menu.getLevel();
+    int scelta = menu.getCurrentLevel().diff;
 
-    if (scelta == 0) speedMult = 1;
-    else if (scelta == 1) speedMult = 3;
-    else if (scelta == 2) speedMult = 5;
+    if (scelta == 0) speedMult = menu.getCurrentLevel().diff+1;
+    else if (scelta == 1) speedMult = menu.getCurrentLevel().diff+2;
+    else if (scelta == 2) speedMult = menu.getCurrentLevel().diff+3;
 
     nodelay(stdscr, TRUE);
     keypad(stdscr, TRUE);
@@ -197,16 +198,14 @@ void Game::startGame(){
 
 void Game::openDeathMenu(){
     gameState = onDeathScreen;
-    int scelta = menu.getLevel();
+    int scelta = menu.getCurrentLevel().diff;
 
-    if (scelta == 0) scriba.insert(score+100, "facile");
-    else if (scelta == 1) scriba.insert(score+200, "medio");
-    else if (scelta == 2) scriba.insert(score+300, "difficile");
+    if (scelta == 0) scriba.insert(score+((menu.getCurrentLevel().diff+1)*100), "facile");
+    else if (scelta == 1) scriba.insert(score+((menu.getCurrentLevel().diff+1)*100), "medio");
+    else if (scelta == 2) scriba.insert(score+((menu.getCurrentLevel().diff+1)*100), "difficile");
 
     score = 0;
     menu.openDeath();
-    mvwprintw(menu.getMenuBoard().getWin(), 0, 0, "HAI FATTO TOT PUNTI");
-    wrefresh(menu.getMenuBoard().getWin());
     processInputDeath();
 
 }
@@ -297,7 +296,7 @@ void Game::updateSnake(Direction inputDirection) {
         if (apple[i].getPosition() == newHead) {
             
             //score management
-            int scelta = menu.getLevel();
+            int scelta = menu.getCurrentLevel().diff;
             if (scelta == 0) score += 1;
             else if (scelta == 1) score += 3;
             else if (scelta == 2) score += 5;
