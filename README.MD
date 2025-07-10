@@ -4,7 +4,7 @@ Un classico gioco Snake realizzato in C++ con interfaccia testuale tramite ncurs
 
 ## Descrizione
 
-Questo progetto implementa il gioco Snake, dove il giocatore controlla un serpente che cresce mangiando mele e deve evitare di scontrarsi con se stesso. Il gioco offre un menu, diversi livelli di difficoltà, una classifica dei punteggi e un timer.
+Questo progetto implementa il gioco Snake, dove il giocatore controlla un serpente e deve fare punti mangiando piú mele possibili nel tempo stabilito, evitando di scontrarsi con se stesso. Il gioco offre un menu, diversi livelli di difficoltà, una classifica dei punteggi e un timer.
 
 ## Struttura del progetto
 
@@ -12,7 +12,7 @@ Questo progetto implementa il gioco Snake, dove il giocatore controlla un serpen
 - `Game.hpp/cpp`: logica principale del gioco, gestione degli stati e delle schermate.
 - `Menu.hpp/cpp`: gestione del menu principale, selezione livelli e opzioni.
 - `Board.hpp/cpp`: gestione della finestra di gioco e delle operazioni di disegno.
-- `Snake.hpp/cpp`: logica del serpente (movimento, collisioni, crescita).
+- `Snake.hpp/cpp`: logica del serpente (movimento e collisioni).
 - `Apple.hpp/cpp`: gestione delle mele.
 - `Scriba.hpp/cpp`: gestione della classifica e salvataggio punteggi.
 - `Const.hpp`: costanti di configurazione (dimensioni, limiti, ecc).
@@ -102,7 +102,7 @@ Questo progetto implementa il gioco Snake, dove il giocatore controlla un serpen
 - Su macOS, se riscontri problemi con ncurses, assicurati di usare la versione aggiornata tramite Homebrew.
 - La classifica viene salvata nel file `classifica.txt` nella cartella del gioco.
 
-## Autore
+## Autori
 
 - Andrea Di Dio
 - Mattia Sergio
