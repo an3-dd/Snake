@@ -104,5 +104,5 @@ Questo progetto implementa il gioco Snake, dove il giocatore controlla un serpen
 
 ## Autore
 
-Andrea Di Dio
-Mattia Sergio
+- Andrea Di Dio
+- Mattia Sergio
