@@ -104,4 +104,5 @@ Questo progetto implementa il gioco Snake, dove il giocatore controlla un serpen
 
 ## Autore
 
-Progetto universitario di programmazione
+Andrea Di Dio
+Mattia Sergio
