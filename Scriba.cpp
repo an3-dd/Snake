@@ -20,11 +20,11 @@ void Scriba::showScores() {
     std::ifstream ifs("classifica.txt");
     if (!ifs.is_open()) return;
 
-    char line[RAW_LEN];
+    char line[ROW_LEN];
     Position center;
     center.y = 1;
 
-    while (ifs.getline(line, RAW_LEN)) {
+    while (ifs.getline(line, ROW_LEN)) {
         int len = std::strlen(line);
         Position pos = { (WIDTH - len) / 2, center.y++ };
         scoreBoard.addStringAt(pos, line);
@@ -32,9 +32,8 @@ void Scriba::showScores() {
 
     // messaggi finali
     center.y += 2;
-    scoreBoard.addStringAt({(WIDTH - 42) / 2, center.y++}, (char*)"premi qualsiasi tasto per tornare al menu");
-    scoreBoard.addStringAt({(WIDTH - 45) / 2, center.y++}, (char*)"oppure premi c per resettare tutta la classifica");
-
+    scoreBoard.addStringAt({(WIDTH - 40) / 2, center.y++}, (char*)"PREMI QUALUNQUE TASTO PER TORNARE AL MENU");
+    scoreBoard.addStringAt({(WIDTH - 26) / 2, center.y++}, (char*)"PREMI C PER PULIRE IL PODIO");
     refresh();
 
 
@@ -58,11 +57,13 @@ void Scriba::cleanPodium() {
 
 
 // funzione che inserisce pts e level nell'array righe contenente tutte le righe presenti nel file
-void Scriba::insertRec(char righe[][RAW_LEN], int pos, int pts, const char level[]){
-
-    if (pos >= MAX_RAW || righe[pos][0] == '\0'){
-        // inserisce all'interno di una riga (righe[pos]) la stringa "punti livello"
-        snprintf(righe[pos], RAW_LEN, "%d %s", pts, level);
+void Scriba::insertRec(char righe[][ROW_LEN], int pos, int pts, const char level[]){
+    if (pos >= MAX_ROW) {
+        // classifica piena, non inserire nulla
+        return;
+    }
+    if (righe[pos][0] == '\0'){
+        snprintf(righe[pos], ROW_LEN, "%d %s", pts, level);
         return;
     }
 
@@ -75,9 +76,9 @@ void Scriba::insertRec(char righe[][RAW_LEN], int pos, int pts, const char level
     if (pts > currPts){
 
         // sposta tutte le righe successivo in basso per creare spazio al nuovo punteggio
-        for (int i = MAX_RAW - 1; i > pos; --i) strcpy(righe[i], righe[i-1]);
+        for (int i = MAX_ROW - 1; i > pos; --i) strcpy(righe[i], righe[i-1]);
         // inserice in righe[pos] il risultato che volevamo aggiungere
-        snprintf(righe[pos], RAW_LEN, "%d %s", pts, level);
+        snprintf(righe[pos], ROW_LEN, "%d %s", pts, level);
         return;
     }
 
@@ -88,20 +89,16 @@ void Scriba::insertRec(char righe[][RAW_LEN], int pos, int pts, const char level
 
 void Scriba::insert(int pts, const char level[]){
 
-    char righe[MAX_RAW][RAW_LEN] = {{0}};
+    char righe[MAX_ROW][ROW_LEN] = {{0}};
     int count = 0;
 
     // lettura del file esistente
     ifstream ifs("classifica.txt");
 
 
-    while (count < MAX_RAW){
-
-        // se non si riesce a estrapolare una riga -> siamo arrivati alla fine del file
-        // la funzione getline legge anche le righe vuote, quindi non si blocca quando ne trova una
-        if (!ifs.getline(righe[count], RAW_LEN)){
-            break;
-        }
+    // se non si riesce a estrapolare una riga -> siamo arrivati alla fine del file
+    // la funzione getline legge anche le righe vuote, quindi non si blocca quando ne trova una
+    while (count < MAX_ROW && ifs.getline(righe[count], ROW_LEN)){
         // se la riga letta non è vuota allora incrementa count
         if (righe[count][0] != '\0'){
             count++;
@@ -118,7 +115,7 @@ void Scriba::insert(int pts, const char level[]){
 
     // sovrascriviamo il file con il nuovo contenuto
     ofstream ofs("classifica.txt");
-    for (int i = 0; i < MAX_RAW && righe[i][0] != '\0'; i++) ofs << righe[i] << '\n';
+    for (int i = 0; i < MAX_ROW && righe[i][0] != '\0'; i++) ofs << righe[i] << '\n';
     ofs.close();
 }
 

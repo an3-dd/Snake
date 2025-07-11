@@ -1,11 +1,6 @@
 #include "Game.hpp"
-#include "Const.hpp"
-#include "Menu.hpp"
-#include "Position.hpp"
-#include <ncurses.h>
 
 using namespace std;
-
 
 Game::Game(){
     srand(time(0));
@@ -18,7 +13,9 @@ Game::Game(){
     }
 
     score = 0;
-    currentDirection = UP; // Default starting direction
+
+    // Default starting direction
+    currentDirection = UP; 
 
     openMenu();
 }
@@ -68,39 +65,52 @@ void Game::printScore() {
     sprintf(buffer, "%d", score);
 
     char score[] = {"Score: "};
-    board.addStringAt(0, 0, score);
-    board.addStringAt(7, 0, buffer);
+
+    Position centered(0, 0);
+    Position bufferPos(7, 0);
+    board.addStringAt(centered, score);
+    board.addStringAt(bufferPos, buffer);
     refresh();
 }
 
 
 void Game::printTimer() {
     int elapsedPause = 0;
+
+    // calculate elapsed time based on game state
     if (gameState == onMenu && pauseTime > 0) {
         elapsedPause = (int)(pauseTime - startTime);
     } else {
         elapsedPause = (int)(time(nullptr) - startTime);
     }
+
+    // calculate seconds left
     int secondsLeft = timeLimit - elapsedPause;
     if (secondsLeft < 0) secondsLeft = 0;
+
+    // format the timer as min:sec
     int min = secondsLeft / 60;
     int sec = secondsLeft % 60;
     char buffer[16];
     sprintf(buffer, "%02d:%02d", min, sec);
 
     char timer[] = {"Timer: "};
-    board.addStringAt(WIDTH - 12, 0, timer);
-    board.addStringAt(WIDTH - 5, 0, buffer);
+
+    Position centered(WIDTH - 12, 0);
+    Position bufferPos(WIDTH - 5, 0);
+    board.addStringAt(centered, timer);
+    board.addStringAt(bufferPos, buffer);
     refresh();
 }
 
 
 
 void Game::openMenu(){
-    // Pause the timer
+    // pause the timer
     if (gameState == onGame) {
         pauseTime = time(nullptr);
     }
+
     gameState = onMenu;
     menu.open();
     processInput();
@@ -113,20 +123,14 @@ void Game::startGame(){
     snake.reset();
 
     board.addBorder();
-    refresh();
-
     initPrintSnake();
-    refresh();
-
     spawnApples();
-    refresh();
-
     printScore();
     refresh();
 
     // TIMER SETUP
     if (pauseTime > 0) {
-        // Resume timer
+        // resume timer
         startTime += (time(nullptr) - pauseTime);
     } else {
         startTime = time(nullptr);
@@ -135,12 +139,14 @@ void Game::startGame(){
     printTimer();
     refresh();
 
-    char tornamenu[] = {"PRESS M TO MENU"};
-    board.addStringAt(center.x - 7, HEIGHT-1, tornamenu);
+    char tornamenu[] = {"PREMI M PER IL MENU"};
+    Position centered(center.x - 10, HEIGHT-1);
+    board.addStringAt(centered, tornamenu);
     refresh();
 
-
+    // time between moves
     int baseDelay = 200;
+
     int speedMult = 1;
     int scelta = menu.getCurrentLevel().diff;
 
@@ -148,8 +154,10 @@ void Game::startGame(){
     else if (scelta == 1) speedMult = menu.getCurrentLevel().diff+2;
     else if (scelta == 2) speedMult = menu.getCurrentLevel().diff+3;
 
+    // don't block on input
     nodelay(stdscr, TRUE);
     keypad(stdscr, TRUE);
+
     int c = 0;
 
     while (gameState == onGame){
@@ -171,6 +179,7 @@ void Game::startGame(){
         }
 
         updateSnake(currentDirection);
+
         // TIMER UPDATE (freeze if paused)
         int elapsed;
         if (gameState == onMenu && pauseTime > 0) {
@@ -234,13 +243,11 @@ GameState Game::getGameState(){
 //APPLE METHODS
 
 void Game::printApple(Position p){
-    if (board.isEmpty(p)) board.addCharAt(p, this->apple[0].getIcon(), 1); // 1 = rosso
+    if (board.isEmpty(p)) board.addCharAt(p, this->apple[0].getIcon(), 1); // 1 = red
 }
 
 void Game::removeApple(Position p){
-    if (board.getCharAt(p) == this->apple[0].getIcon()){
-        board.rmCharAt(p);
-    }
+    if (board.getCharAt(p) == this->apple[0].getIcon()) board.rmCharAt(p);
 }
 
 void Game::spawnApples(){
@@ -260,14 +267,14 @@ void Game::spawnApples(){
 
 void Game::initPrintSnake(){ //only called at the start
     //add head
-    board.addCharAt(center, this->snake.getHeadIcon(), 2); // 2 = verde
+    board.addCharAt(center, this->snake.getHeadIcon(), 2); // 2 = green
 
     //add body
     //delta is the position where to spawn the next segment
     Position delta = center; 
     for(int i=1; i<SNAKE_LENGTH; i++){
         delta.y = center.y+i;
-        board.addCharAt(delta, this->snake.getBodyIcon(), 2); // 2 = verde
+        board.addCharAt(delta, this->snake.getBodyIcon(), 2);
     }
     refresh();
 }
@@ -284,14 +291,16 @@ void Game::updateSnake(Direction inputDirection) {
 
     Position newHead = snake.getHead();
 
-    //Apple check BEFORE placing snake head
+    //Apple check before placing snake head
     bool ateApple = false;
 
     int i = 0;
     bool done = false;
 
-    while (i < 10 && !done){
+    while (i < APPLE_COUNT && !done){
         if (apple[i].getPosition() == newHead) {
+
+            // assign score based on difficulty
             int scelta = menu.getCurrentLevel().diff;
             if (scelta == 0) score += 1;
             else if (scelta == 1) score += 3;
@@ -301,10 +310,11 @@ void Game::updateSnake(Direction inputDirection) {
             removeApple(apple[i].getPosition());
 
             Position newPos;
+
+            //respawn apple if spawn has failed
             do {
                 newPos = randomPosition();
             } while (!board.isEmpty(newPos));
-
             apple[i] = Apple(newPos);
             printApple(newPos);
             done = true;
@@ -313,10 +323,10 @@ void Game::updateSnake(Direction inputDirection) {
     }
 
     //draw body and head
-    board.addCharAt(previousHead, snake.getBodyIcon(), 2); // verde
-    board.addCharAt(snake.getHead(), snake.getHeadIcon(), 2); // verde
+    board.addCharAt(previousHead, snake.getBodyIcon(), 2); // 2 = green
+    board.addCharAt(snake.getHead(), snake.getHeadIcon(), 2);
 
-    //if an apple was eaten, print the score
+    //if an apple was eaten, update the score
     if (ateApple) printScore(); 
     
     refresh();

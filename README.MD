@@ -12,13 +12,13 @@ Questo progetto implementa il gioco Snake, dove il giocatore controlla un serpen
 - `Game.hpp/cpp`: logica principale del gioco, gestione degli stati e delle schermate.
 - `Menu.hpp/cpp`: gestione del menu principale, selezione livelli e opzioni.
 - `Board.hpp/cpp`: gestione della finestra di gioco e delle operazioni di disegno.
-- `Snake.hpp/cpp`: logica del serpente (movimento e collisioni).
+- `Snake.hpp/cpp`: logica e movimento del serpente.
 - `Apple.hpp/cpp`: gestione delle mele.
 - `Scriba.hpp/cpp`: gestione della classifica e salvataggio punteggi.
 - `Const.hpp`: costanti di configurazione (dimensioni, limiti, ecc).
 - `Position.hpp`: struttura per rappresentare le coordinate.
 - `classifica.txt`: file di testo per la classifica.
-- `Makefile`: per compilare il progetto su sistemi Unix-like.
+- `Makefile`: per compilare il progetto su Linux.
 
 ## Requisiti
 
@@ -85,7 +85,7 @@ Questo progetto implementa il gioco Snake, dove il giocatore controlla un serpen
 
 ## Comandi di gioco
 
-- Usa le frecce direzionali per muovere il serpente.
+- Usa le frecce direzionali / WASD per muovere il serpente.
 - Premi `M` per tornare al menu durante la partita.
 - Nel menu, usa le frecce e Invio per selezionare le opzioni.
 

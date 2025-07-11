@@ -1,5 +1,3 @@
-//#pragma once 
-
 #include <ncurses.h>
 #include "Position.hpp"
 #include "Const.hpp"
@@ -7,7 +5,6 @@
 enum Direction {NONE, UP, DOWN, LEFT, RIGHT};
 
 class Snake{
-
 
     protected:
 
@@ -20,7 +17,9 @@ class Snake{
     //to update the tail position, i store the previous directions
     //so i know in which direction the head has moved (length) steps before
     Direction dirHistory[SNAKE_LENGTH]; 
-    int indexCircular; //for the circular array logic
+
+    //for the circular array logic
+    int indexCircular; 
 
     char headIcon;
     char bodyIcon;
@@ -30,10 +29,8 @@ class Snake{
 
     Snake();
 
-    // return the head's coordinate
     Position getHead();
 
-    // return the tail's coordinate
     Position getTail();
 
     char getHeadIcon();
@@ -43,8 +40,10 @@ class Snake{
     // allow the snake to move, it returns false if it collides with himself
     bool move(Direction inputDirection);
 
+    // returns true if the snake is in position p
     bool snakeIsHere(Position p);
 
+    // it's the same as the constructor, but it resets the snake
     void reset();
 
 };

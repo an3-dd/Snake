@@ -11,14 +11,17 @@ class Apple{
 
     public:
 
-    // the econstructor of the apple
+    // the constructor of the apple
     Apple(Position);
-    Apple(); //default constructor, needed for the array in game
+
+    // default constructor, needed for the array in game
+    Apple(); 
 
 
     // return the apple's icon
     char getIcon();
 
+    // return the apple's position
     Position getPosition();
 
 

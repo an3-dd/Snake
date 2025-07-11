@@ -8,6 +8,7 @@ Board::Board() {
 
   int maxY, maxX;
   getmaxyx(stdscr, maxY, maxX);
+
   win_y = (maxY / 2) - (HEIGHT / 2);
   win_x = (maxX / 2) - (WIDTH / 2);
 
@@ -22,16 +23,24 @@ Board::~Board() {
 }
 
 void Board::init(){
+
+    // enable cbreak mode to disable line buffering
     cbreak();
+
+    // disable echoing of typed characters
     noecho();
+
+    // enable keypad input for the window 
     keypad(stdscr, TRUE);
+    
     clear();
     refresh();
 
+    // initialize colors if supported
     if (has_colors()) {
         start_color();
-        init_pair(1, COLOR_RED, COLOR_BLACK);   // Apple color
-        init_pair(2, COLOR_GREEN, COLOR_BLACK); // Snake color
+        init_pair(1, COLOR_RED, COLOR_BLACK);   // apple color
+        init_pair(2, COLOR_GREEN, COLOR_BLACK); // snake color
     }
 }
 
@@ -42,11 +51,6 @@ void Board::addBorder() { box(win, 0, 0); }
 void Board::clear() {
   wclear(win);
   addBorder();
-}
-
-void Board::addCharAt(int x, int y, chtype ch) {
-  mvwaddch(win, y, x, ch);
-  wrefresh(win);
 }
 
 void Board::addCharAt(Position p, chtype ch) {
@@ -68,17 +72,6 @@ void Board::addStringAt(Position p, char str[]) {
   while (str[i] != '\0') {
     addCharAt(p, str[i]);
     p.x++;
-    i++;
-  }
-}
-
-void Board::addStringAt(int x, int y, char str[]) {
-
-  int i = 0;
-
-  while (str[i] != '\0') {
-    addCharAt(x, y, str[i]);
-    x++;
     i++;
   }
 }

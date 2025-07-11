@@ -29,7 +29,7 @@ public:
     void initBoard();
 
     // funzione ausiliaria di insert
-    void insertRec(char righe[][RAW_LEN], int pos, int pts, const char level[]);
+    void insertRec(char righe[][ROW_LEN], int pos, int pts, const char level[]);
 
     // inserisce una riga contenente il punteggio e il livello in modo ordinato dentro la classifica.txt 
     void insert(int pts, const char level[]);

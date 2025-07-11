@@ -5,5 +5,8 @@ const int WIDTH = 80;
 const int SNAKE_LENGTH = 10;
 const int APPLE_COUNT = 10;
 
-const int MAX_RAW = 34;       // massimo numero di righe
-const int RAW_LEN = 100;       // lunghezza massima per riga
+// max number of scores to show
+const int MAX_ROW = 10;
+
+// max length of a row in the score file
+const int ROW_LEN = 100;

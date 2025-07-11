@@ -1,7 +1,8 @@
 #include "Snake.hpp"
 
 Snake::Snake() {
-  for (int x = 0; x < WIDTH; x++) { // initialization
+  // initialization of the matrix
+  for (int x = 0; x < WIDTH; x++) { 
     for (int y = 0; y < HEIGHT; y++) {
       body[x][y] = false;
     }
@@ -66,7 +67,8 @@ bool Snake::move(Direction inputDirection) {
 
   // calculate new head position
   Position newHead = headPosition;
-  // Loop one step before the border (so snake never enters the border)
+
+  // loop one step before the border
   if (currentDirection == UP) {
     if (newHead.y == 1) newHead.y = HEIGHT - 2;
     else newHead.y = newHead.y - 1;
@@ -84,7 +86,6 @@ bool Snake::move(Direction inputDirection) {
     else newHead.x = newHead.x + 1;
   }
 
-
   // check if it collides with himself, if it does, return false
   if (snakeIsHere(newHead))
     return false;
@@ -93,7 +94,7 @@ bool Snake::move(Direction inputDirection) {
   body[newHead.x][newHead.y] = true;
   headPosition = newHead;
 
-  // Clear old tail position and update tailPosition accordingly
+  // clear old tail position and update tailPosition accordingly
   body[tailPosition.x][tailPosition.y] = false;
 
   if (tailDirection == UP) {
@@ -121,8 +122,7 @@ bool Snake::move(Direction inputDirection) {
   return true;
 }
 
-void Snake::reset() { // it's the same as the constructor, but it resets the
-                      // snake
+void Snake::reset() {
   for (int x = 0; x < WIDTH; x++) {
     for (int y = 0; y < HEIGHT; y++) {
       body[x][y] = false;

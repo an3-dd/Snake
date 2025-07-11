@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <ncurses.h>
 #include "Const.hpp"
 #include "Apple.hpp"
@@ -15,14 +14,14 @@ enum GameState {onGame, onMenu, onPause, onDeathScreen};
 
 class Game{
 
-
     protected:
 
     Board board;
     Menu menu;
     Position center;
    
-    Apple apple[APPLE_COUNT]; //there are x apples on the screen, when one is eaten it respawns in another point
+    // there are x apples on the screen, when one is eaten it respawns in another point
+    Apple apple[APPLE_COUNT];
     Snake snake;
     Scriba scriba;
 
@@ -30,11 +29,20 @@ class Game{
 
     int score;
 
-    Direction currentDirection; // stores the current direction for auto-move
+    // stores the current direction for auto-move
+    Direction currentDirection; 
 
+
+    // sets the current computer time as the start time
     time_t startTime;
-    int timeLimit = 300; // 5 minutes in seconds
+
+    // 5 minutes in seconds
+    int timeLimit = 300; 
+
+    // if the game is paused, this is the time when it was paused
     time_t pauseTime = 0;
+
+    // if the game is paused, this is the time when it was started again
     int timePaused = 0;
 
     public:
@@ -69,6 +77,7 @@ class Game{
 
     Position randomPosition();
 
+    
     //Apple methods
 
     void printApple(Position p);
