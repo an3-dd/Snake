@@ -44,7 +44,6 @@ Levels Menu::getCurrentLevel(){
   return this->currentLevel;
 }
 
-// aggiunge i livelli alla lista bidirezionale
 bool Menu::addLevel(int d, char name[]) {
 
   bool done = false;
@@ -107,7 +106,6 @@ void Menu::initLevels() {
   addLevel(2, difficile);
 }
 
-// Board::init()
 void Menu::initBoard() { menuBoard.init(); }
 
 void Menu::showOptions() {
@@ -134,9 +132,10 @@ void Menu::showOptions() {
     menuBoard.clear();
     for (int i = 0; i < numVoices; i++) {
       int len = strlen(voices[i]);
-      pos.x = center.x - len / 2; // centra la voce rispetto all'asse x
+      pos.x = center.x - len / 2; // center the voice on the x-axis
       pos.y = (HEIGHT - numVoices) / 2 + i;
       if (i == selected) {
+        // highlight the selected option
         wattron(menuBoard.getWin(), A_REVERSE);
         menuBoard.addStringAt(pos, voices[i]);
         wattroff(menuBoard.getWin(), A_REVERSE);
@@ -171,6 +170,7 @@ void Menu::showDeathOptions(){
   center.x = WIDTH / 2;
   center.y = HEIGHT / 2;
   keypad(menuBoard.getWin(), TRUE);
+  // hide the cursor
   curs_set(0);
 
   bool done = false;
@@ -180,6 +180,7 @@ void Menu::showDeathOptions(){
       pos.x = center.x;
       pos.y = (HEIGHT - numVoices) / 2 + i;
       if (i == selected) {
+        // highlight the selected option
         wattron(menuBoard.getWin(), A_REVERSE);
         menuBoard.addStringAt(pos, voices[i]);
         wattroff(menuBoard.getWin(), A_REVERSE);

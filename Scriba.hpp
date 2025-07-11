@@ -19,23 +19,23 @@ protected:
 public:
 
 
-    // costruttore
+    // constructor
     Scriba();
 
-    // rimuove il contenuto del file
+    // removes the content of the file
     void cleanPodium();
 
-    // inizializza scoreBoard
+    // initializes scoreBoard
     void initBoard();
 
-    // funzione ausiliaria di insert
+    // auxiliary function for insert
     void insertRec(char righe[][ROW_LEN], int pos, int pts, const char level[]);
 
-    // inserisce una riga contenente il punteggio e il livello in modo ordinato dentro la classifica.txt 
+    // inserts a line containing the score and level in an ordered manner into the classifica.txt
     void insert(int pts, const char level[]);
 
-    // mostra i dati salvati all'interno del file classifica.txt
-    // mediante l'uso di ifstream
+    // shows the data saved inside the file classifica.txt
+    // using ifstream
     void showScores();
 
 
